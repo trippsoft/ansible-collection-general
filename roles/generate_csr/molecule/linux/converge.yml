@@ -1,0 +1,6 @@
+---
+- name: Converge
+  hosts:
+    - subjects
+  roles:
+    - trippsc2.general.generate_csr

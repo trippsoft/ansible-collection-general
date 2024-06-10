@@ -1,0 +1,35 @@
+---
+galaxy_info:
+  author: Jim Tarpley
+  namespace: trippsc2
+  role_name: generate_csr
+  description: This role generates a Certificate Signing Request (CSR) for a Linux or Windows machine, if an existing certificate doesn't exist or needs renewal.
+
+  license: MIT
+
+  min_ansible_version: '2.11'
+
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+    - name: EL
+      versions:
+        - '8'
+        - '9'
+    - name: Ubuntu
+      versions:
+        - focal
+        - hirsute
+        - impish
+    - name: Windows
+      versions:
+        - '2019'
+        - '2022'
+
+collections:
+  - ansible.windows
+  - community.crypto
+
+dependencies: []

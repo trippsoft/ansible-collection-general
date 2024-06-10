@@ -1,0 +1,35 @@
+---
+- name: Verify
+  hosts:
+    - windows
+  become: true
+  tasks:
+  - name: Get private key file info
+    ansible.windows.win_stat:
+      path: "{{ cert_private_key_path | default('C:\\Windows\\Temp\\cert.key') }}"
+    register: _private_key_info
+
+  - name: Get private key backup file info
+    ansible.windows.win_stat:
+      path: "{{ cert_private_key_path | default('C:\\Windows\\Temp\\cert.key') }}.bak"
+    register: private_key_backup_info
+
+  - name: Get CSR file info
+    ansible.windows.win_stat:
+      path: "{{ cert_csr_path | default('C:\\Windows\\Temp\\cert.csr') }}"
+    register: _csr_info
+
+  - name: Assert that private key exists
+    ansible.builtin.assert:
+      that:
+        - _private_key_info.stat.exists
+
+  - name: Assert that private key backup exists
+    ansible.builtin.assert:
+      that:
+        - private_key_backup_info.stat.exists == expected_private_key_backup
+
+  - name: Assert that CSR exists
+    ansible.builtin.assert:
+      that:
+        - _csr_info.stat.exists == expected_csr

@@ -1,0 +1,46 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+  cachier: machine
+  parallel: true
+platforms:
+  - name: case1 # no existing cert
+    box: jtarpley/${MOLECULE_BOX:-w2022_cis}
+    memory: 2048
+    cpus: 2
+  - name: case2 # existing renewable cert
+    box: jtarpley/${MOLECULE_BOX:-w2022_cis}
+    memory: 2048
+    cpus: 2
+  - name: case3 # existing valid cert
+    box: jtarpley/${MOLECULE_BOX:-w2022_cis}
+    memory: 2048
+    cpus: 2
+provisioner:
+  name: ansible
+  inventory:
+    links:
+      hosts: ./hosts
+      host_vars: ./host_vars/
+      group_vars: ./group_vars/
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    #- idempotence
+    # Removed idempotence check, because this scenario cannot be made idempotent.
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

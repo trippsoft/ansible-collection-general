@@ -1,0 +1,73 @@
+---
+- name: Install cryptography python library
+  become: true
+  ansible.builtin.package:
+    name:
+      - python3-cryptography
+    state: present
+
+- name: Remove existing CSR, if needed
+  become: true
+  ansible.builtin.file:
+    path: "{{ cert_csr_tmp_path }}"
+    state: absent
+
+- name: Set variables to indicate whether to generate private key and CSR
+  ansible.builtin.set_fact:
+    _cert_generate_csr: "{{ cert_force_regenerate }}"
+
+- name: Check existing certificate
+  when:
+    - not _cert_generate_csr
+  become: true
+  block:
+    - name: Check existing certificate information
+      community.crypto.x509_certificate_info:
+        path: "{{ cert_certificate_path }}"
+        valid_at:
+          point_1: "+0d"
+          point_2: "+{{ cert_regenerate_days }}d"
+      ignore_errors: true
+      register: _cert_existing
+
+    - name: Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
+      when:
+        - _cert_existing.failed or
+          not _cert_existing.valid_at.point_1 or
+          not _cert_existing.valid_at.point_2
+      ansible.builtin.set_fact:
+        _cert_generate_csr: true
+
+- name: Set variable to indicate to generate a new private key
+  when:
+    - _cert_generate_csr
+  become: true
+  block:
+    - name: Ensure private key has been generated
+      community.crypto.openssl_privatekey:
+        path: "{{ cert_private_key_path }}"
+        owner: "{{ cert_private_key_owner }}"
+        group: "{{ cert_private_key_group }}"
+        mode: "{{ cert_private_key_mode }}"
+        type: "{{ cert_private_key_type }}"
+        size: "{{ cert_private_key_size }}"
+        backup: "{{ cert_backup_replaced_private_key }}"
+        regenerate: always
+
+    - name: Generate a new CSR
+      community.crypto.openssl_csr:
+        privatekey_path: "{{ cert_private_key_path }}"
+        common_name: "{{ cert_common_name }}"
+        subject_alt_name: "{{ cert_subject_alternative_names }}"
+        organization_name: "{{ cert_organization_name | default(omit) }}"
+        organizational_unit_name: "{{ cert_organizational_unit_name | default(omit) }}"
+        locality_name: "{{ cert_locality_name | default(omit) }}"
+        state_or_province_name: "{{ cert_state_or_province_name | default(omit) }}"
+        country_name: "{{ cert_country_name | default(omit) }}"
+        key_usage: "{{ cert_key_usage }}"
+        key_usage_critical: "{{ cert_key_usage_critical }}"
+        extended_key_usage: "{{ cert_extended_key_usage }}"
+        extended_key_usage_critical: "{{ cert_extended_key_usage_critical }}"
+        basic_constraints: "{{ cert_basic_constraints }}"
+        basic_constraints_critical: "{{ cert_basic_constraints_critical }}"
+        path: "{{ cert_csr_tmp_path }}"

@@ -1,0 +1,96 @@
+---
+- name: Set variables to indicate whether to generate private key or CSR
+  ansible.builtin.set_fact:
+    _cert_generate_csr: "{{ cert_force_regenerate }}"
+
+- name: Check existing certificate
+  when:
+    - not _cert_generate_csr
+  block:
+    - name: Get certificate content
+      become: true
+      ansible.builtin.slurp:
+        src: "{{ cert_certificate_path }}"
+      ignore_errors: true
+      register: _cert_existing
+
+    - name: Check existing certificate information
+      when:
+        - not _cert_existing.failed
+        - _cert_existing.content is defined
+      delegate_to: localhost
+      community.crypto.x509_certificate_info:
+        content: "{{ _cert_existing.content | b64decode }}"
+        valid_at:
+          point_1: "+0d"
+          point_2: "+{{ cert_regenerate_days }}d"
+      register: _cert_existing_cert
+
+    - name: Set variable to indicate whether to generate CSR
+      when:
+        - _cert_existing.failed or
+          not _cert_existing_cert.valid_at.point_1 or
+          not _cert_existing_cert.valid_at.point_2
+      ansible.builtin.set_fact:
+        _cert_generate_csr: true
+
+- name: Generate private key and CSR
+  when:
+    - _cert_generate_csr
+  block:
+    - name: Backup private key, if it exists
+      when:
+        - cert_backup_replaced_private_key
+      block:
+        - name: Check if there is existing private key
+          become: true
+          ansible.windows.win_stat:
+            path: "{{ cert_private_key_path }}"
+          register: _cert_existing_priv_key
+
+        - name: Backup private key
+          when:
+            - _cert_existing_priv_key.stat.exists
+          become: true
+          ansible.windows.win_copy:
+            remote_src: true
+            src: "{{ cert_private_key_path }}"
+            dest: "{{ cert_private_key_path }}.bak"
+
+    - name: Generate private key
+      delegate_to: localhost
+      community.crypto.openssl_privatekey_pipe:
+        type: "{{ cert_private_key_type }}"
+        size: "{{ cert_private_key_size }}"
+      register: _cert_new_private_key
+
+    - name: Copy private key to path
+      become: true
+      ansible.windows.win_copy:
+        content: "{{ _cert_new_private_key.privatekey }}"
+        dest: "{{ cert_private_key_path }}"
+
+    - name: Generate CSR
+      delegate_to: localhost
+      community.crypto.openssl_csr_pipe:
+        privatekey_content: "{{ _cert_new_private_key.privatekey }}"
+        common_name: "{{ cert_common_name }}"
+        subject_alt_name: "{{ cert_subject_alternative_names }}"
+        organization_name: "{{ cert_organization_name | default(omit) }}"
+        organizational_unit_name: "{{ cert_organizational_unit_name | default(omit) }}"
+        locality_name: "{{ cert_locality_name | default(omit) }}"
+        state_or_province_name: "{{ cert_state_or_province_name | default(omit) }}"
+        country_name: "{{ cert_country_name | default(omit) }}"
+        key_usage: "{{ cert_key_usage }}"
+        key_usage_critical: "{{ cert_key_usage_critical }}"
+        extended_key_usage: "{{ cert_extended_key_usage }}"
+        extended_key_usage_critical: "{{ cert_extended_key_usage_critical }}"
+        basic_constraints: "{{ cert_basic_constraints }}"
+        basic_constraints_critical: "{{ cert_basic_constraints_critical }}"
+      register: _cert_csr
+
+    - name: Copy CSR to path
+      become: true
+      ansible.windows.win_copy:
+        content: "{{ _cert_csr.csr }}"
+        dest: "{{ cert_csr_tmp_path }}"

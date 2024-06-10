@@ -1,0 +1,6 @@
+---
+generate_existing_private_key: true
+generate_existing_cert: true
+existing_cert_duration: +1w
+
+expected_csr: true

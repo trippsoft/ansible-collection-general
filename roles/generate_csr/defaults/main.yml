@@ -1,0 +1,31 @@
+---
+cert_force_regenerate: false
+
+cert_certificate_path: "{{ _cert_default_certificate_path | default(omit) }}"
+cert_regenerate_days: 30
+
+cert_private_key_path: "{{ _cert_default_private_key_path | default(omit) }}"
+cert_private_key_owner: root
+cert_private_key_group: root
+cert_private_key_mode: '0600'
+cert_private_key_type: RSA
+cert_private_key_size: 2048
+cert_backup_replaced_private_key: true
+
+cert_common_name: "{{ inventory_hostname }}"
+cert_subject_alternative_names:
+  - "DNS:{{ cert_common_name }}"
+
+cert_key_usage:
+  - digitalSignature
+  - keyEncipherment
+cert_key_usage_critical: true
+
+cert_extended_key_usage:
+  - serverAuth
+cert_extended_key_usage_critical: true
+
+cert_basic_constraints: []
+cert_basic_constraints_critical: true
+
+cert_csr_tmp_path: "{{ _cert_default_csr_tmp_path | default(omit) }}"

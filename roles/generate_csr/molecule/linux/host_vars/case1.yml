@@ -1,0 +1,5 @@
+---
+generate_existing_private_key: false
+generate_existing_cert: false
+
+expected_csr: true

@@ -1,0 +1,172 @@
+---
+argument_specs:
+  main:
+    short_description: Generate CSR
+    description:
+      - This role generates a Certificate Signing Request (CSR) for a Linux or Windows machine, if an existing certificate doesn't exist or needs renewal.
+    author:
+      - Jim Tarpley
+    options:
+      cert_force_regenerate:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to force regeneration of the CSR, even if the certificate is not near expiration.
+          - If `true`, the role will not be idempotent.
+      cert_certifcate_path:
+        type: path
+        required: false
+        default: OS Specific
+        description:
+          - The path to the certificate file to generate.
+          - On Debian-based Linux, this defaults to `/etc/ssl/certs/cert.crt`.
+          - On Red Hat-based Linux, this defaults to `/etc/pki/tls/certs/cert.crt`.
+          - On Windows, this defaults to `C:\Windows\Temp\cert.crt`.
+      cert_regenerate_days:
+        type: int
+        required: false
+        default: 30
+        description:
+          - The number of days before the certificate expiration to regenerate the CSR.
+      cert_private_key_path:
+        type: path
+        required: false
+        default: OS Specific
+        description:
+          - The path to the private key file to generate.
+          - On Debian-based Linux, this defaults to `/etc/ssl/private/cert.key`.
+          - On Red Hat-based Linux, this defaults to `/etc/pki/tls/private/cert.key`.
+          - On Windows, this defaults to `C:\Windows\Temp\cert.key`.
+      cert_private_key_owner:
+        type: str
+        required: false
+        default: root
+        description:
+          - The owner of the private key on Linux systems.
+      cert_private_key_group:
+        type: str
+        required: false
+        default: root
+        description:
+          - The group of the private key on Linux systems.
+      cert_private_key_mode:
+        type: str
+        required: false
+        default: '0600'
+        description:
+          - The mode of the private key on Linux systems.
+      cert_private_key_type:
+        type: str
+        required: false
+        default: RSA
+        choices:
+          - DSA
+          - ECC
+          - Ed25519
+          - Ed448
+          - RSA
+          - X25519
+          - X448
+        description:
+          - The type of private key to generate.
+      cert_private_key_size:
+        type: int
+        required: false
+        default: 2048
+        description:
+          - The size of the private key to generate.
+      cert_backup_replaced_private_key:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to backup the replaced private key.
+      cert_common_name:
+        type: str
+        required: false
+        default: "{{ inventory_hostname }}"
+        description:
+          - The Common Name (CN) of the certificate.
+      cert_subject_alternative_names:
+        type: list
+        elements: str
+        required: false
+        description:
+          - The Subject Alternative Names (SANs) of the certificate.
+          - DNS names should be prefixed with `DNS:` and IP addresses should be prefixed with `IP:`.
+      cert_organization_name:
+        type: str
+        required: false
+        description:
+          - The Organization Name (O) of the certificate.
+      cert_organizational_unit_name:
+        type: str
+        required: false
+        description:
+          - The Organizational Unit Name (OU) of the certificate.
+      cert_locality_name:
+        type: str
+        required: false
+        description:
+          - The Locality Name (L) of the certificate.
+      cert_state_or_province_name:
+        type: str
+        required: false
+        description:
+          - The State or Province Name (ST) of the certificate.
+      cert_country_name:
+        type: str
+        required: false
+        description:
+          - The Country Name (C) of the certificate.
+      cert_key_usage:
+        type: list
+        elements: str
+        required: false
+        default: 
+          - digitalSignature
+          - keyEncipherment
+        description:
+          - The key usage of the certificate.
+      cert_key_usage_critical:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether the key usage is critical.
+      cert_extended_key_usage:
+        type: list
+        elements: str
+        required: false
+        default: 
+          - serverAuth
+          - clientAuth
+        description:
+          - The extended key usage of the certificate.
+      cert_extended_key_usage_critical:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether the extended key usage is critical.
+      cert_basic_constraints:
+        type: list
+        elements: str
+        required: false
+        description:
+          - The basic constraints of the certificate.
+      cert_basic_constraints_critical:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether the basic constraints are critical.
+      cert_csr_tmp_path:
+        type: path
+        required: false
+        default: OS Specific
+        description:
+          - The path to the CSR file to generate.
+          - On Linux, this defaults to `/tmp/cert.csr`.
+          - On Windows, this defaults to `C:\Windows\Temp\cert.csr`.

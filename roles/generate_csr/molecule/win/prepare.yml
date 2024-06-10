@@ -1,0 +1,57 @@
+---
+- name: Prepare
+  hosts:
+    - subjects
+  gather_facts: false
+  tasks:    
+    - name: Generate private key
+      when:
+        - generate_existing_private_key
+      block:
+        - name: Generate existing private key
+          delegate_to: localhost
+          community.crypto.openssl_privatekey_pipe:
+            type: RSA
+            size: 2048
+          register: _private_key
+
+        - name: Copy private key to path
+          ansible.windows.win_copy:
+            content: "{{ _private_key.privatekey }}"
+            dest: C:\Windows\Temp\cert.key
+
+    - name: Generate existing certificate
+      when:
+        - generate_existing_cert
+      block:
+        - name: Generate CSR
+          delegate_to: localhost
+          community.crypto.openssl_csr_pipe:
+            privatekey_content: "{{ _private_key.privatekey }}"
+            common_name: "{{ inventory_hostname }}"
+            subject_alt_name:
+              - "DNS:{{ inventory_hostname }}"
+            key_usage:
+              - digitalSignature
+              - keyEncipherment
+            key_usage_critical: true
+            extended_key_usage:
+              - serverAuth
+            extended_key_usage_critical: true
+            basic_constraints: []
+            basic_constraints_critical: true
+          register: _csr_content
+
+        - name: Generate self-signed certificate
+          delegate_to: localhost
+          community.crypto.x509_certificate_pipe:
+            csr_content: "{{ _csr_content.csr }}"
+            privatekey_content: "{{ _private_key.privatekey }}"
+            provider: selfsigned
+            selfsigned_not_after: "{{ existing_cert_duration }}"
+          register: _cert_content
+
+        - name: Copy certificate to path
+          ansible.windows.win_copy:
+            content: "{{ _cert_content.certificate }}"
+            dest: C:\Windows\Temp\cert.crt
