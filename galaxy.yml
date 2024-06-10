@@ -1,0 +1,18 @@
+---
+namespace: trippsc2
+name: general
+version: 1.0.0
+readme: README.md
+authors:
+  - Jim Tarpley
+description: This collection contains general purpose Ansible plugins.
+
+license_file: 'LICENSE'
+
+tags: []
+
+dependencies: {}
+
+repository: https://github.com/trippsc2/ansible-collection-general.git
+
+build_ignore: []

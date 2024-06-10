@@ -1,0 +1,17 @@
+- name: Prepare
+  hosts:
+    - all
+  gather_facts: false
+  tasks:
+    - name: Copy files
+      loop:
+        - src: files/winca.pem
+          dest: /home/vagrant/winca.pem
+        - src: files/dc.pem
+          dest: /home/vagrant/dc.pem
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: '0640'
+        owner: vagrant
+        group: vagrant

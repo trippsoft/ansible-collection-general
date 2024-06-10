@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts:
+    - all
+  gather_facts: false
+  tasks:
+    - name: Combine certificates
+      trippsc2.general.combine_certificates:
+        certificates:
+          - /home/vagrant/winca.pem
+          - /home/vagrant/dc.pem
+        path: /home/vagrant/combined.pem
+        owner: vagrant
+        group: vagrant
+        mode: '0640'
