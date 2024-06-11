@@ -17,4 +17,5 @@ dependencies:
 
 repository: https://github.com/trippsc2/ansible-collection-general.git
 
-build_ignore: []
+build_ignore:
+  - .gitignore
