@@ -5,7 +5,7 @@ output_mode: replace
 output_template: |
   <!-- BEGIN_ANSIBLE_DOCS -->
   
-  # Ansible Role: {{ metadata.galaxy_info.namespace }}.{{ metadata.galaxy_info.role_name }}
+  # Ansible Role: {{ role }}
   {%- if "version" in galaxy_collection %}
   Version: {{ galaxy_collection.version }}
   {% endif %}

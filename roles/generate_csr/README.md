@@ -1,13 +1,17 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
-# Ansible Role: trippsc2.generate_csr
+# Ansible Role: trippsc2.general.generate_csr
+Version: 2.1.1
+
 This role generates a Certificate Signing Request (CSR) for a Linux or Windows machine, if an existing certificate doesn't exist or needs renewal.
 
 ## Requirements
 
 | Platform | Versions |
 | -------- | -------- |
-| EL | 8 |
+| Debian | bullseye, bookworm |
+| EL | 8, 9 |
+| Ubuntu | focal, hirsute, impish |
 | Windows | 2019, 2022 |
 
 ## Dependencies
@@ -50,5 +54,5 @@ This role generates a Certificate Signing Request (CSR) for a Linux or Windows m
 MIT
 
 ## Author and Project Information
-Jim Tarpley @ Precision Aviation Group
+Jim Tarpley
 <!-- END_ANSIBLE_DOCS -->
