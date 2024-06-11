@@ -9,10 +9,10 @@ This role generates a Certificate Signing Request (CSR) for a Linux or Windows m
 
 | Platform | Versions |
 | -------- | -------- |
-| Debian | bullseye, bookworm |
-| EL | 8, 9 |
-| Ubuntu | focal, hirsute, impish |
-| Windows | 2019, 2022 |
+| Debian | <ul><li>bullseye</li><li>bookworm</li></ul> |
+| EL | <ul><li>8</li><li>9</li></ul> |
+| Ubuntu | <ul><li>focal</li><li>hirsute</li><li>impish</li></ul> |
+| Windows | <ul><li>2019</li><li>2022</li></ul> |
 
 ## Dependencies
 
