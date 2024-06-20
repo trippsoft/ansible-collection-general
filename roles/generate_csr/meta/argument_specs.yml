@@ -90,8 +90,8 @@ argument_specs:
           - The Common Name (CN) of the certificate.
       cert_subject_alternative_names:
         type: list
-        elements: str
         required: false
+        elements: str
         description:
           - The Subject Alternative Names (SANs) of the certificate.
           - DNS names should be prefixed with `DNS:` and IP addresses should be prefixed with `IP:`.
@@ -122,11 +122,11 @@ argument_specs:
           - The Country Name (C) of the certificate.
       cert_key_usage:
         type: list
-        elements: str
         required: false
         default: 
           - digitalSignature
           - keyEncipherment
+        elements: str
         description:
           - The key usage of the certificate.
       cert_key_usage_critical:
@@ -137,11 +137,11 @@ argument_specs:
           - Whether the key usage is critical.
       cert_extended_key_usage:
         type: list
-        elements: str
         required: false
         default: 
           - serverAuth
           - clientAuth
+        elements: str
         description:
           - The extended key usage of the certificate.
       cert_extended_key_usage_critical:
@@ -152,8 +152,8 @@ argument_specs:
           - Whether the extended key usage is critical.
       cert_basic_constraints:
         type: list
-        elements: str
         required: false
+        elements: str
         description:
           - The basic constraints of the certificate.
       cert_basic_constraints_critical:
