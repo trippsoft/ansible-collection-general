@@ -1,0 +1,4 @@
+---
+_cert_default_certificate_path: /etc/ssl/certs/cert.crt
+_cert_default_private_key_path: /etc/ssl/private/cert.key
+_cert_default_csr_tmp_path: /tmp/cert.csr

@@ -1,0 +1,33 @@
+---
+- name: Get contents of CSR
+  ansible.builtin.slurp:
+    src: "{{ cert_csr_tmp_path }}"
+  register: _csr_data
+  failed_when: false
+
+- name: Generate CSR and sign certificate
+  when:
+    - _csr_data.content is defined
+  block:
+    - name: Get contents of private key
+      ansible.builtin.slurp:
+        src: "{{ cert_private_key_path }}"
+      register: _private_key_data
+
+    - name: Generate and sign new certificate
+      delegate_to: localhost
+      community.crypto.x509_certificate_pipe:
+        csr_content: "{{ _csr_data.content | b64decode }}"
+        privatekey_content: "{{ _private_key_data.content | b64decode }}"
+        provider: selfsigned
+      register: _cert_data
+
+    - name: Copy certificate to path
+      ansible.windows.win_copy:
+        content: "{{ _cert_data.certificate }}"
+        dest: "{{ cert_certificate_path }}"
+
+    - name: Remove CSR file
+      ansible.windows.win_file:
+        path: "{{ cert_csr_tmp_path }}"
+        state: absent

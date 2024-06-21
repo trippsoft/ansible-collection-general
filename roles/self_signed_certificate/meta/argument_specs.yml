@@ -1,0 +1,27 @@
+---
+argument_specs:
+  main:
+    short_description: Self-Signed Certificate
+    description:
+      - This role generates a self-signed TLS certificate.
+    author:
+      - Jim Tarpley
+    options:
+      cert_certificate_owner:
+        type: str
+        required: false
+        default: root
+        description:
+          - The owner of the certificate on Linux systems.
+      cert_certificate_group:
+        type: str
+        required: false
+        default: root
+        description:
+          - The group of the certificate on Linux systems.
+      cert_certificate_mode:
+        type: str
+        required: false
+        default: '0644'
+        description:
+          - The mode of the certificate on Linux systems.
