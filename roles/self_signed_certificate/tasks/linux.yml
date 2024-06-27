@@ -3,13 +3,11 @@
   become: true
   ansible.builtin.stat:
     path: "{{ cert_csr_tmp_path }}"
-  register: _csr_stat
-  ignore_errors: true
+  register: _cert_csr
 
 - name: Generate CSR and sign certificate
   when:
-    - not _csr_stat.failed
-    - _csr_stat.stat.exists
+    - _cert_csr.stat.exists
   block:
     - name: Generate and sign new certificate
       become: true

@@ -1,14 +1,18 @@
 ---
-- name: Get contents of CSR
-  ansible.builtin.slurp:
-    src: "{{ cert_csr_tmp_path }}"
-  register: _csr_data
-  failed_when: false
+- name: Check that the CSR was generated
+  ansible.windows.win_stat:
+    path: "{{ cert_csr_tmp_path }}"
+  register: _cert_csr
 
 - name: Generate CSR and sign certificate
   when:
-    - _csr_data.content is defined
+    - _cert_csr.stat.exists
   block:
+    - name: Get contents of CSR
+      ansible.builtin.slurp:
+        src: "{{ cert_csr_tmp_path }}"
+      register: _cert_csr_data
+
     - name: Get contents of private key
       ansible.builtin.slurp:
         src: "{{ cert_private_key_path }}"
