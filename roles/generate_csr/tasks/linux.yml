@@ -21,22 +21,26 @@
     - not _cert_generate_csr
   become: true
   block:
-    - name: Check existing certificate information
-      community.crypto.x509_certificate_info:
-        path: "{{ cert_certificate_path }}"
-        valid_at:
-          point_1: "+0d"
-          point_2: "+{{ cert_regenerate_days }}d"
-      ignore_errors: true
-      register: _cert_existing
+    - name: Ensure existing certificate is not expired or about to expire
+      block:
+        - name: Check existing certificate information
+          community.crypto.x509_certificate_info:
+            path: "{{ cert_certificate_path }}"
+            valid_at:
+              point_1: "+0d"
+              point_2: "+{{ cert_regenerate_days }}d"
+          register: _cert_existing
 
-    - name: Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
-      when:
-        - _cert_existing.failed or
-          not _cert_existing.valid_at.point_1 or
-          not _cert_existing.valid_at.point_2
-      ansible.builtin.set_fact:
-        _cert_generate_csr: true
+        - name: Set variable to indicate to generate CSR
+          when:
+            - not _cert_existing.valid_at.point_1 or
+              not _cert_existing.valid_at.point_2
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
+      rescue:
+        - name: Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
 
 - name: Set variable to indicate to generate a new private key
   when:

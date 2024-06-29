@@ -12,21 +12,38 @@ platforms:
     box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - subjects
   - name: case2 # existing renewable cert
     box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - subjects
   - name: case3 # existing valid cert
     box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - subjects
 provisioner:
   name: ansible
   inventory:
-    links:
-      hosts: ./hosts
-      host_vars: ./host_vars/
-      group_vars: ./group_vars/
+    host_vars:
+      case1:
+        generate_existing_private_key: false
+        generate_existing_cert: false
+        expected_csr: true
+      case2:
+        generate_existing_private_key: true
+        generate_existing_cert: true
+        existing_cert_duration: +1w
+        expected_csr: true
+      case3:
+        generate_existing_private_key: true
+        generate_existing_cert: true
+        existing_cert_duration: +8w
+        expected_csr: false
 verifier:
   name: ansible
 scenario:

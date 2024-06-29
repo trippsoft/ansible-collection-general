@@ -28,6 +28,8 @@ galaxy_info:
         - '2019'
         - '2022'
 
+allow_duplicates: true
+
 collections:
   - ansible.windows
   - community.crypto

@@ -7,32 +7,36 @@
   when:
     - not _cert_generate_csr
   block:
-    - name: Get certificate content
-      become: true
-      ansible.builtin.slurp:
-        src: "{{ cert_certificate_path }}"
-      ignore_errors: true
-      register: _cert_existing
+    - name: Ensure existing certificate is not expired or about to expire
+      block:
+        - name: Get certificate content
+          become: true
+          ansible.builtin.slurp:
+            src: "{{ cert_certificate_path }}"
+          register: _cert_existing
 
-    - name: Check existing certificate information
-      when:
-        - not _cert_existing.failed
-        - _cert_existing.content is defined
-      delegate_to: localhost
-      community.crypto.x509_certificate_info:
-        content: "{{ _cert_existing.content | b64decode }}"
-        valid_at:
-          point_1: "+0d"
-          point_2: "+{{ cert_regenerate_days }}d"
-      register: _cert_existing_cert
+        - name: Check existing certificate information
+          when:
+            - not _cert_existing.failed
+            - _cert_existing.content is defined
+          delegate_to: localhost
+          community.crypto.x509_certificate_info:
+            content: "{{ _cert_existing.content | b64decode }}"
+            valid_at:
+              point_1: "+0d"
+              point_2: "+{{ cert_regenerate_days }}d"
+          register: _cert_existing_cert
 
-    - name: Set variable to indicate whether to generate CSR
-      when:
-        - _cert_existing.failed or
-          not _cert_existing_cert.valid_at.point_1 or
-          not _cert_existing_cert.valid_at.point_2
-      ansible.builtin.set_fact:
-        _cert_generate_csr: true
+        - name: Set variable to indicate whether to generate CSR
+          when:
+            - not _cert_existing_cert.valid_at.point_1 or
+              not _cert_existing_cert.valid_at.point_2
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
+      rescue:
+        - name: Set variable to indicate whether to generate CSR
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
 
 - name: Generate private key and CSR
   when:
