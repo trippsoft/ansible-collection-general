@@ -20,9 +20,9 @@ argument_specs:
         default: OS Specific
         description:
           - The path to the certificate file to generate.
-          - On Debian-based Linux, this defaults to `/etc/ssl/certs/cert.crt`.
-          - On Red Hat-based Linux, this defaults to `/etc/pki/tls/certs/cert.crt`.
-          - On Windows, this defaults to `C:\Windows\Temp\cert.crt`.
+          - On Debian-based systems, this defaults to `/etc/ssl/certs/cert.crt`.
+          - On EL systems, this defaults to `/etc/pki/tls/certs/cert.crt`.
+          - On Windows systems, this defaults to `C:\Windows\Temp\cert.crt`.
       cert_regenerate_days:
         type: int
         required: false
@@ -35,9 +35,9 @@ argument_specs:
         default: OS Specific
         description:
           - The path to the private key file to generate.
-          - On Debian-based Linux, this defaults to `/etc/ssl/private/cert.key`.
-          - On Red Hat-based Linux, this defaults to `/etc/pki/tls/private/cert.key`.
-          - On Windows, this defaults to `C:\Windows\Temp\cert.key`.
+          - On Debian-based systems, this defaults to `/etc/ssl/private/cert.key`.
+          - On EL systems, this defaults to `/etc/pki/tls/private/cert.key`.
+          - On Windows systems, this defaults to `C:\Windows\Temp\cert.key`.
       cert_private_key_owner:
         type: str
         required: false
