@@ -16,5 +16,12 @@ platforms:
       - subjects
 provisioner:
   name: ansible
+  inventory:
+    group_vars:
+      subjects:
+        cert_private_key_owner: test
+        cert_private_key_group: test
+        cert_certificate_owner: test
+        cert_certificate_group: test
 verifier:
   name: ansible

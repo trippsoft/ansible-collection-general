@@ -29,6 +29,10 @@ platforms:
 provisioner:
   name: ansible
   inventory:
+    group_vars:
+      subjects:
+        cert_private_key_owner: test
+        cert_private_key_group: test
     host_vars:
       case1:
         generate_existing_private_key: false

@@ -1,10 +1,12 @@
 ---
-- name: Validate OS Family is defined
-  ansible.builtin.assert:
-    that:
-      - ansible_os_family is defined
-    fail_msg: OS Family is not defined.
-    success_msg: "OS Family is defined as {{ ansible_os_family }}."
+- name: Gather OS facts
+  when:
+    - ansible_os_family is not defined
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - os_family
 
 - name: Validate OS Family is supported
   ansible.builtin.assert:

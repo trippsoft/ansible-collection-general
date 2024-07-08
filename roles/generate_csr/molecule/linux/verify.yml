@@ -4,57 +4,70 @@
     - subjects
   become: true
   tasks:
-  - name: Set certificate path variables | Debian-based
-    when:
-      - ansible_os_family == 'Debian'
-    ansible.builtin.set_fact:
-      cert_private_key_path: "{{ cert_private_key_path | default('/etc/ssl/private/cert.key') }}"
+    - name: Set certificate path variables | Debian-based
+      when:
+        - ansible_os_family == 'Debian'
+      ansible.builtin.set_fact:
+        cert_private_key_path: "{{ cert_private_key_path | default('/etc/ssl/private/cert.key') }}"
 
-  - name: Set certificate path variables | EL
-    when:
-      - ansible_os_family == 'RedHat'
-    ansible.builtin.set_fact:
-      cert_private_key_path: "{{ cert_private_key_path | default('/etc/pki/tls/private/cert.key') }}"
+    - name: Set certificate path variables | EL
+      when:
+        - ansible_os_family == 'RedHat'
+      ansible.builtin.set_fact:
+        cert_private_key_path: "{{ cert_private_key_path | default('/etc/pki/tls/private/cert.key') }}"
 
-  - name: Set expected variables
-    ansible.builtin.set_fact:
-      private_key_owner: "{{ cert_private_key_owner | default('root') }}"
-      private_key_group: "{{ cert_private_key_group | default('root') }}"
-      private_key_mode: "{{ cert_private_key_mode | default('0600') }}"
+    - name: Get private key file info
+      ansible.builtin.stat:
+        path: "{{ cert_private_key_path }}"
+      register: _private_key_info
 
-  - name: Get private key file info
-    ansible.builtin.stat:
-      path: "{{ cert_private_key_path }}"
-    register: _private_key_info
+    - name: Get CSR file info
+      ansible.builtin.stat:
+        path: "{{ cert_csr_path | default('/tmp/cert.csr') }}"
+      register: _csr_info
 
-  - name: Get CSR file info
-    ansible.builtin.stat:
-      path: "{{ cert_csr_path | default('/tmp/cert.csr') }}"
-    register: _csr_info
+    - name: Validate private key exists
+      ansible.builtin.assert:
+        that:
+          - _private_key_info.stat.exists
+        fail_msg: Private key file does not exist.
+        success_msg: Private key file exists.
 
-  - name: Assert that private key info is expected
-    ansible.builtin.assert:
-      that:
-        - _private_key_info.stat.pw_name == private_key_owner
-        - _private_key_info.stat.gr_name == private_key_group
-        - _private_key_info.stat.mode == private_key_mode
-      fail_msg: Private key file does not have expected owner, group, or mode.
-      success_msg: Private key file has expected owner, group, and mode.
+    - name: Validate private key owner
+      ansible.builtin.assert:
+        that:
+          - _private_key_info.stat.pw_name == cert_private_key_owner | default('root')
+        fail_msg: Private key file does not have expected owner.
+        success_msg: Private key file has expected owner.
 
-  - name: Assert that CSR exists
-    when:
-      - expected_csr
-    ansible.builtin.assert:
-      that:
-        - _csr_info.stat.exists
-      fail_msg: CSR file does not exist.
-      success_msg: CSR file exists.
+    - name: Validate private key group
+      ansible.builtin.assert:
+        that:
+          - _private_key_info.stat.gr_name == cert_private_key_group | default('root')
+        fail_msg: Private key file does not have expected group.
+        success_msg: Private key file has expected group.
 
-  - name: Assert that CSR does not exist
-    when:
-      - not expected_csr
-    ansible.builtin.assert:
-      that:
-        - not _csr_info.stat.exists
-      fail_msg: CSR file exists.
-      success_msg: CSR file does not exist.
+    - name: Validate private key mode
+      ansible.builtin.assert:
+        that:
+          - _private_key_info.stat.mode == cert_private_key_mode | default('0600')
+        fail_msg: Private key file does not have expected mode.
+        success_msg: Private key file has expected mode.
+
+    - name: Validate that CSR file exists
+      when:
+        - expected_csr
+      ansible.builtin.assert:
+        that:
+          - _csr_info.stat.exists
+        fail_msg: CSR file does not exist.
+        success_msg: CSR file exists.
+
+    - name: Validate that CSR file does not exist
+      when:
+        - not expected_csr
+      ansible.builtin.assert:
+        that:
+          - not _csr_info.stat.exists
+        fail_msg: CSR file exists.
+        success_msg: CSR file does not exist.

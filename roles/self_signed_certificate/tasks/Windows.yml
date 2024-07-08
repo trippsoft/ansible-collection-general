@@ -16,13 +16,13 @@
     - name: Get contents of private key
       ansible.builtin.slurp:
         src: "{{ cert_private_key_path }}"
-      register: _private_key_data
+      register: _cert_private_key_data
 
     - name: Generate and sign new certificate
       delegate_to: localhost
       community.crypto.x509_certificate_pipe:
-        csr_content: "{{ _csr_data.content | b64decode }}"
-        privatekey_content: "{{ _private_key_data.content | b64decode }}"
+        csr_content: "{{ _cert_csr_data.content | b64decode }}"
+        privatekey_content: "{{ _cert_private_key_data.content | b64decode }}"
         provider: selfsigned
       register: _cert_data
 

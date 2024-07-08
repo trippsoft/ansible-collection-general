@@ -27,5 +27,5 @@
       ansible.builtin.assert:
         that:
           - _combined_cert == _combined_content.content | b64decode
-        fail_msg: "Combined certificate is not equal to winca.pem + dc.pem"
-        success_msg: "Combined certificate is equal to winca.pem + dc.pem"
+        fail_msg: Combined certificate does not have the same content as winca.pem + dc.pem.
+        success_msg: Combined certificate has the same content as winca.pem + dc.pem.
