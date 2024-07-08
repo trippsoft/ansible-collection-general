@@ -19,14 +19,14 @@
       path: "{{ cert_csr_path | default('C:\\Windows\\Temp\\cert.csr') }}"
     register: _csr_info
 
-  - name: Validate that private key exists
+  - name: Verify that private key exists
     ansible.builtin.assert:
       that:
         - _private_key_info.stat.exists
       fail_msg: Private key file does not exist.
       success_msg: Private key file exists.
 
-  - name: Validate that private key backup exists
+  - name: Verify that private key backup exists
     when:
       - expected_private_key_backup
     ansible.builtin.assert:
@@ -35,7 +35,7 @@
       fail_msg: Private key backup file does not exist.
       success_msg: Private key backup file exists.
 
-  - name: Validate that private key backup does not exist
+  - name: Verify that private key backup does not exist
     when:
       - not expected_private_key_backup
     ansible.builtin.assert:
@@ -44,7 +44,7 @@
       fail_msg: Private key backup file exists.
       success_msg: Private key backup file does not exist.
 
-  - name: Validate that CSR exists
+  - name: Verify that CSR exists
     when:
       - expected_csr
     ansible.builtin.assert:
@@ -53,7 +53,7 @@
       fail_msg: CSR file does not exist.
       success_msg: CSR file exists.
 
-  - name: Validate that CSR does not exist
+  - name: Verify that CSR does not exist
     when:
       - not expected_csr
     ansible.builtin.assert:
