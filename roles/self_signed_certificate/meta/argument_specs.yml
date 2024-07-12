@@ -13,15 +13,18 @@ argument_specs:
         default: root
         description:
           - The owner of the certificate on Linux systems.
+          - On Windows systems, this is ignored.
       cert_certificate_group:
         type: str
         required: false
         default: root
         description:
           - The group of the certificate on Linux systems.
+          - On Windows systems, this is ignored.
       cert_certificate_mode:
         type: str
         required: false
         default: '0644'
         description:
           - The mode of the certificate on Linux systems.
+          - On Windows systems, this is ignored.

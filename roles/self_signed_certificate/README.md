@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.general.self_signed_certificate
-Version: 2.3.5
+Version: 2.3.6
 
 This role generates a self-signed TLS certificate.
 
@@ -27,9 +27,9 @@ This role generates a self-signed TLS certificate.
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
-| cert_certificate_owner | <p>The owner of the certificate on Linux systems.</p> | str | no |  | root |
-| cert_certificate_group | <p>The group of the certificate on Linux systems.</p> | str | no |  | root |
-| cert_certificate_mode | <p>The mode of the certificate on Linux systems.</p> | str | no |  | 0644 |
+| cert_certificate_owner | <p>The owner of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
+| cert_certificate_group | <p>The group of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
+| cert_certificate_mode | <p>The mode of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | 0644 |
 
 
 ## License

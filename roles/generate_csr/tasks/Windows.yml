@@ -65,7 +65,8 @@
       delegate_to: localhost
       community.crypto.openssl_privatekey_pipe:
         type: "{{ cert_private_key_type }}"
-        size: "{{ cert_private_key_size }}"
+        size: "{{ _cert_private_key_size }}"
+        curve: "{{ _cert_private_key_curve }}"
       register: _cert_new_private_key
 
     - name: Copy private key to path

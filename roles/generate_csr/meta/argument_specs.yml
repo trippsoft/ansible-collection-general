@@ -13,11 +13,10 @@ argument_specs:
         default: false
         description:
           - Whether to force regeneration of the CSR, even if the certificate is not near expiration.
-          - If `true`, the role will not be idempotent.
+          - If set to `true`, the role will not be idempotent.
       cert_certifcate_path:
         type: path
         required: false
-        default: OS Specific
         description:
           - The path to the certificate file to generate.
           - On Debian-based systems, this defaults to `/etc/ssl/certs/cert.crt`.
@@ -32,7 +31,6 @@ argument_specs:
       cert_private_key_path:
         type: path
         required: false
-        default: OS Specific
         description:
           - The path to the private key file to generate.
           - On Debian-based systems, this defaults to `/etc/ssl/private/cert.key`.
@@ -44,18 +42,21 @@ argument_specs:
         default: root
         description:
           - The owner of the private key on Linux systems.
+          - On Windows systems, this is ignored.
       cert_private_key_group:
         type: str
         required: false
         default: root
         description:
           - The group of the private key on Linux systems.
+          - On Windows systems, this is ignored.
       cert_private_key_mode:
         type: str
         required: false
         default: '0600'
         description:
           - The mode of the private key on Linux systems.
+          - On Windows systems, this is ignored.
       cert_private_key_type:
         type: str
         required: false
@@ -73,9 +74,35 @@ argument_specs:
       cert_private_key_size:
         type: int
         required: false
-        default: 2048
         description:
           - The size of the private key to generate.
+          - If *cert_private_key_type* is `RSA` or `DSA`, this defaults to `2048`.
+      cert_private_key_curve:
+        type: str
+        required: false
+        choices:
+          - secp224r1
+          - secp256k1
+          - secp256r1
+          - secp384r1
+          - secp521r1
+          - secp192r1
+          - brainpoolP256r1
+          - brainpoolP384r1
+          - brainpoolP512r1
+          - sect163k1
+          - sect163r2
+          - sect233k1
+          - sect233r1
+          - sect283k1
+          - sect283r1
+          - sect409k1
+          - sect409r1
+          - sect571k1
+          - sect571r1
+        description:
+          - The curve of the private key to generate.
+          - If *cert_private_key_type* is `ECC`, this defaults to `secp384r1`.
       cert_backup_replaced_private_key:
         type: bool
         required: false
@@ -94,7 +121,7 @@ argument_specs:
         elements: str
         description:
           - The Subject Alternative Names (SANs) of the certificate.
-          - DNS names should be prefixed with `DNS:` and IP addresses should be prefixed with `IP:`.
+          - DNS names should be prefixed with `DNS:`, IP addresses should be prefixed with `IP:`, and Email addresses should be prefixed with `email:`.
       cert_organization_name:
         type: str
         required: false
@@ -127,6 +154,16 @@ argument_specs:
           - digitalSignature
           - keyEncipherment
         elements: str
+        choices:
+          - digitalSignature
+          - nonRepudiation
+          - keyEncipherment
+          - dataEncipherment
+          - keyAgreement
+          - keyCertSign
+          - cRLSign
+          - encipherOnly
+          - decipherOnly
         description:
           - The key usage of the certificate.
       cert_key_usage_critical:
@@ -165,8 +202,7 @@ argument_specs:
       cert_csr_tmp_path:
         type: path
         required: false
-        default: OS Specific
         description:
           - The path to the CSR file to generate.
-          - On Linux, this defaults to `/tmp/cert.csr`.
-          - On Windows, this defaults to `C:\Windows\Temp\cert.csr`.
+          - For Linux systems, this defaults to `/tmp/cert.csr`.
+          - For Windows systems, this defaults to `C:\Windows\Temp\cert.csr`.

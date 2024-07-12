@@ -14,3 +14,70 @@
       - ansible_os_family in _cert_supported_os_families
     fail_msg: "OS Family '{{ ansible_os_family }}' is not supported."
     success_msg: "OS Family '{{ ansible_os_family }}' is supported."
+
+- name: Include OS family variables
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Check if private key owner user exists
+  when:
+    - ansible_os_family != 'Windows'
+  become: true
+  check_mode: true
+  ansible.builtin.user:
+    name: "{{ cert_private_key_owner }}"
+    state: present
+  register: _cert_validate_user
+
+- name: Validate private key owner user exists
+  when:
+    - ansible_os_family != 'Windows'
+  ansible.builtin.assert:
+    that:
+      - not _cert_validate_user.changed
+    fail_msg: "User '{{ cert_private_key_owner }}' does not exist."
+    success_msg: "User '{{ cert_private_key_owner }}' exists."
+
+- name: Check if private key group exists
+  when:
+    - ansible_os_family != 'Windows'
+  become: true
+  check_mode: true
+  ansible.builtin.group:
+    name: "{{ cert_private_key_group }}"
+    state: present
+  register: _cert_validate_group
+
+- name: Validate private key group exists
+  when:
+    - ansible_os_family != 'Windows'
+  ansible.builtin.assert:
+    that:
+      - not _cert_validate_group.changed
+    fail_msg: "Group '{{ cert_private_key_group }}' does not exist."
+    success_msg: "Group '{{ cert_private_key_group }}' exists."
+
+- name: Validate RSA private key size
+  when:
+    - cert_private_key_type == 'RSA'
+  ansible.builtin.assert:
+    that:
+      - cert_private_key_size | int > 512
+    fail_msg: RSA private key size must be greater than 512.
+    success_msg: RSA private key size is valid.
+
+- name: Validate DSA private key size
+  when:
+    - cert_private_key_type == 'DSA'
+  ansible.builtin.assert:
+    that:
+      - cert_private_key_size | int in _cert_allowed_dsa_key_sizes
+    fail_msg: "DSA private key size is not valid. Valid sizes are: {{ _cert_allowed_dsa_key_sizes | join(', ') }}"
+    success_msg: DSA private key size is valid.
+
+- name: Validate Subject Alternative Name
+  loop: "{{ cert_subject_alternative_names }}"
+  ansible.builtin.assert:
+    that:
+      - item | regex_search('^(dirName|DNS|email|IP|RID|otherName|URI):')
+    fail_msg: "Subject Alternative Name '{{ item }}' is not valid."
+    success_msg: "Subject Alternative Name '{{ item }}' is valid."

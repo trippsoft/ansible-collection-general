@@ -54,7 +54,8 @@
         group: "{{ cert_private_key_group }}"
         mode: "{{ cert_private_key_mode }}"
         type: "{{ cert_private_key_type }}"
-        size: "{{ cert_private_key_size }}"
+        size: "{{ _cert_private_key_size }}"
+        curve: "{{ _cert_private_key_curve }}"
         backup: "{{ cert_backup_replaced_private_key }}"
         regenerate: always
 
