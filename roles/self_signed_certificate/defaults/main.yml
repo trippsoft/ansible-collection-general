@@ -1,9 +1,4 @@
 ---
-cert_private_key_path: "{{ _cert_default_private_key_path }}"
-
-cert_certificate_path: "{{ _cert_default_certificate_path }}"
 cert_certificate_owner: root
 cert_certificate_group: root
 cert_certificate_mode: '0644'
-
-cert_csr_tmp_path: "{{ _cert_default_csr_tmp_path }}"

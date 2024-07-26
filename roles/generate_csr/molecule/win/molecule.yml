@@ -33,6 +33,9 @@ provisioner:
   name: ansible
   inventory:
     group_vars:
+      subjects:
+        cert_certificate_path: C:\Windows\Temp\cert.crt
+        cert_private_key_path: C:\Windows\Temp\cert.key
       windows:
         ansible_shell_type: powershell
         ansible_become_method: runas

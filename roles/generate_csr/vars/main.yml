@@ -15,3 +15,5 @@ _cert_allowed_dsa_key_sizes:
   - 2048
   - 3072
   - 4096
+
+_cert_csr_tmp_path: "{{ cert_csr_tmp_path | default(_cert_default_csr_tmp_path) }}"

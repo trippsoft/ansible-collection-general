@@ -9,7 +9,7 @@
 - name: Remove existing CSR, if needed
   become: true
   ansible.builtin.file:
-    path: "{{ cert_csr_tmp_path }}"
+    path: "{{ _cert_csr_tmp_path }}"
     state: absent
 
 - name: Set variables to indicate whether to generate private key and CSR
@@ -75,4 +75,4 @@
         extended_key_usage_critical: "{{ cert_extended_key_usage_critical }}"
         basic_constraints: "{{ cert_basic_constraints }}"
         basic_constraints_critical: "{{ cert_basic_constraints_critical }}"
-        path: "{{ cert_csr_tmp_path }}"
+        path: "{{ _cert_csr_tmp_path }}"

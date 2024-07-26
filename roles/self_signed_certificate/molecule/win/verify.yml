@@ -5,12 +5,12 @@
   tasks:
   - name: Get private key file info
     ansible.windows.win_stat:
-      path: "{{ cert_private_key_path | default('C:\\Windows\\Temp\\cert.key') }}"
+      path: "{{ cert_private_key_path }}"
     register: _private_key_info
 
   - name: Get certificate file info
     ansible.windows.win_stat:
-      path: "{{ cert_certificate_path | default('C:\\Windows\\Temp\\cert.crt') }}"
+      path: "{{ cert_certificate_path }}"
     register: _certificate_info
 
   - name: Get CSR file info

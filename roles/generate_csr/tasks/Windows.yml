@@ -98,4 +98,4 @@
       become: true
       ansible.windows.win_copy:
         content: "{{ _cert_csr.csr }}"
-        dest: "{{ cert_csr_tmp_path }}"
+        dest: "{{ _cert_csr_tmp_path }}"

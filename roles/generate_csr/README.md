@@ -25,9 +25,9 @@ This role generates a Certificate Signing Request (CSR) for a Linux or Windows m
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
 | cert_force_regenerate | <p>Whether to force regeneration of the CSR, even if the certificate is not near expiration.</p><p>If set to `true`, the role will not be idempotent.</p> | bool | no |  | false |
-| cert_certifcate_path | <p>The path to the certificate file to generate.</p><p>On Debian-based systems, this defaults to `/etc/ssl/certs/cert.crt`.</p><p>On EL systems, this defaults to `/etc/pki/tls/certs/cert.crt`.</p><p>On Windows systems, this defaults to `C:\Windows\Temp\cert.crt`.</p> | path | no |  |  |
+| cert_certificate_path | <p>The path to the certificate file to generate.</p> | path | yes |  |  |
 | cert_regenerate_days | <p>The number of days before the certificate expiration to regenerate the CSR.</p> | int | no |  | 30 |
-| cert_private_key_path | <p>The path to the private key file to generate.</p><p>On Debian-based systems, this defaults to `/etc/ssl/private/cert.key`.</p><p>On EL systems, this defaults to `/etc/pki/tls/private/cert.key`.</p><p>On Windows systems, this defaults to `C:\Windows\Temp\cert.key`.</p> | path | no |  |  |
+| cert_private_key_path | <p>The path to the private key file to generate.</p> | path | yes |  |  |
 | cert_private_key_owner | <p>The owner of the private key on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
 | cert_private_key_group | <p>The group of the private key on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
 | cert_private_key_mode | <p>The mode of the private key on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | 0600 |

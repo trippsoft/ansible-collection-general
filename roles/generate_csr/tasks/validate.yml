@@ -18,41 +18,35 @@
 - name: Include OS family variables
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
-- name: Check if private key owner user exists
+- name: Get OS user data
   when:
     - ansible_os_family != 'Windows'
-  become: true
-  check_mode: true
-  ansible.builtin.user:
-    name: "{{ cert_private_key_owner }}"
-    state: present
-  register: _cert_validate_user
+  ansible.builtin.getent:
+    database: passwd
+    split: ':'
+
+- name: Get OS group data
+  when:
+    - ansible_os_family != 'Windows'
+  ansible.builtin.getent:
+    database: group
+    split: ':'
 
 - name: Validate private key owner user exists
   when:
     - ansible_os_family != 'Windows'
   ansible.builtin.assert:
     that:
-      - not _cert_validate_user.changed
+      - cert_private_key_owner in getent_passwd.keys()
     fail_msg: "User '{{ cert_private_key_owner }}' does not exist."
     success_msg: "User '{{ cert_private_key_owner }}' exists."
-
-- name: Check if private key group exists
-  when:
-    - ansible_os_family != 'Windows'
-  become: true
-  check_mode: true
-  ansible.builtin.group:
-    name: "{{ cert_private_key_group }}"
-    state: present
-  register: _cert_validate_group
 
 - name: Validate private key group exists
   when:
     - ansible_os_family != 'Windows'
   ansible.builtin.assert:
     that:
-      - not _cert_validate_group.changed
+      - cert_private_key_group in getent_group.keys()
     fail_msg: "Group '{{ cert_private_key_group }}' does not exist."
     success_msg: "Group '{{ cert_private_key_group }}' exists."
 

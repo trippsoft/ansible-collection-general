@@ -3,30 +3,16 @@
   hosts:
     - subjects
   tasks:
-    - name: Set file path variables | Debian-based
-      when:
-        - ansible_os_family == 'Debian'
-      ansible.builtin.set_fact:
-        _private_key_path: /etc/ssl/private/cert.key
-        _certificate_path: /etc/ssl/certs/cert.crt
-
-    - name: Set file path variables | EL
-      when:
-        - ansible_os_family == 'RedHat'
-      ansible.builtin.set_fact:
-        _private_key_path: /etc/pki/tls/private/cert.key
-        _certificate_path: /etc/pki/tls/certs/cert.crt
-
     - name: Get private key file info
       become: true
       ansible.builtin.stat:
-        path: "{{ cert_private_key_path | default(_private_key_path) }}"
+        path: "{{ cert_private_key_path }}"
       register: _private_key_info
 
     - name: Get certificate file info
       become: true
       ansible.builtin.stat:
-        path: "{{ cert_certificate_path | default(_certificate_path) }}"
+        path: "{{ cert_certificate_path }}"
       register: _certificate_info
 
     - name: Get CSR file info

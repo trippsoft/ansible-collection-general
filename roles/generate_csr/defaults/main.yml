@@ -1,10 +1,8 @@
 ---
 cert_force_regenerate: false
 
-cert_certificate_path: "{{ _cert_default_certificate_path | default(omit) }}"
 cert_regenerate_days: 30
 
-cert_private_key_path: "{{ _cert_default_private_key_path | default(omit) }}"
 cert_private_key_owner: root
 cert_private_key_group: root
 cert_private_key_mode: '0600'
@@ -28,5 +26,3 @@ cert_extended_key_usage_critical: true
 
 cert_basic_constraints: []
 cert_basic_constraints_critical: true
-
-cert_csr_tmp_path: "{{ _cert_default_csr_tmp_path | default(omit) }}"

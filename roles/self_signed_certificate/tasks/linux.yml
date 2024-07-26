@@ -2,7 +2,7 @@
 - name: Check if CSR exists
   become: true
   ansible.builtin.stat:
-    path: "{{ cert_csr_tmp_path }}"
+    path: "{{ _cert_csr_tmp_path }}"
   register: _cert_csr
 
 - name: Generate CSR and sign certificate
@@ -13,7 +13,7 @@
       become: true
       community.crypto.x509_certificate:
         path: "{{ cert_certificate_path }}"
-        csr_path: "{{ cert_csr_tmp_path }}"
+        csr_path: "{{ _cert_csr_tmp_path }}"
         privatekey_path: "{{ cert_private_key_path }}"
         provider: selfsigned
         owner: "{{ cert_certificate_owner }}"
@@ -24,5 +24,5 @@
     - name: Remove CSR file
       become: true
       ansible.builtin.file:
-        path: "{{ cert_csr_tmp_path }}"
+        path: "{{ _cert_csr_tmp_path }}"
         state: absent

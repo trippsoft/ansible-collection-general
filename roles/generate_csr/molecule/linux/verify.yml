@@ -4,18 +4,6 @@
     - subjects
   become: true
   tasks:
-    - name: Set certificate path variables | Debian-based
-      when:
-        - ansible_os_family == 'Debian'
-      ansible.builtin.set_fact:
-        cert_private_key_path: "{{ cert_private_key_path | default('/etc/ssl/private/cert.key') }}"
-
-    - name: Set certificate path variables | EL
-      when:
-        - ansible_os_family == 'RedHat'
-      ansible.builtin.set_fact:
-        cert_private_key_path: "{{ cert_private_key_path | default('/etc/pki/tls/private/cert.key') }}"
-
     - name: Get private key file info
       ansible.builtin.stat:
         path: "{{ cert_private_key_path }}"
