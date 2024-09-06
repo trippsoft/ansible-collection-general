@@ -61,6 +61,7 @@ argument_specs:
       rotate_new_password:
         type: str
         required: false
+        no_log: true
         description:
           - The new password for the user.
           - If *rotate_use_vault* is `false`, this is required. Otherwise, the new password will be stored in HashiCorp Vault when rotated.
