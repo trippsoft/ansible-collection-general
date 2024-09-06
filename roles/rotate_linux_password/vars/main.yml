@@ -1,0 +1,9 @@
+---
+_rotate_unsupported_os_families:
+  - AIX
+  - Darwin
+  - FreeBSD
+  - HP-UX
+  - SMGL
+  - Solaris
+  - Windows

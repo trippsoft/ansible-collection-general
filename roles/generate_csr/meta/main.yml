@@ -21,8 +21,8 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - focal
-        - hirsute
-        - impish
+        - jammy
+        - noble
     - name: Windows
       versions:
         - '2019'

@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.general.self_signed_certificate
-Version: 2.4.1
+Version: 2.5.0
 
 This role generates a self-signed TLS certificate.
 
@@ -11,7 +11,7 @@ This role generates a self-signed TLS certificate.
 | -------- | -------- |
 | Debian | <ul><li>bullseye</li><li>bookworm</li></ul> |
 | EL | <ul><li>8</li><li>9</li></ul> |
-| Ubuntu | <ul><li>focal</li><li>hirsute</li><li>impish</li></ul> |
+| Ubuntu | <ul><li>focal</li><li>jammy</li><li>noble</li></ul> |
 | Windows | <ul><li>2019</li><li>2022</li></ul> |
 
 ## Dependencies

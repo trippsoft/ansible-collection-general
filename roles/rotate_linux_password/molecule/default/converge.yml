@@ -1,0 +1,74 @@
+---
+- name: Converge
+  hosts:
+    - subjects
+  vars:
+    rotate_new_password: NewPassword123!
+  roles:
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser1
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser1"
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser2
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser2"
+        rotate_period_in_seconds: 0
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser3
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser3"
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser4
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser4"
+        rotate_force_password_change: true
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: testuser1
+        rotate_use_vault: false
+        rotate_period_in_seconds: 0
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: testuser2
+        rotate_use_vault: false
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: testuser3
+        rotate_use_vault: false
+        rotate_force_password_change: true
+
+- name: Idempotence
+  hosts:
+    - subjects
+  vars:
+    rotate_new_password: NeverUsedPassword123!
+  roles:
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser1
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser1"
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser2
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser2"
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser3
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser3"
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: vaultuser4
+        rotate_vault_secret_path: "{{ inventory_hostname }}/users/vaultuser4"
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: testuser1
+        rotate_use_vault: false
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: testuser2
+        rotate_use_vault: false
+    - role: trippsc2.general.rotate_linux_password
+      vars:
+        rotate_user: testuser3
+        rotate_use_vault: false

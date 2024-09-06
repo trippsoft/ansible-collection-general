@@ -1,0 +1,59 @@
+---
+- name: Verify
+  hosts:
+    - subjects
+  tasks:
+    - name: Install pexpect package
+      become: true
+      ansible.builtin.package:
+        name: python3-pexpect
+        state: present
+
+    - name: Test vaultuser1 login
+      vars:
+        ansible_user: vaultuser1
+        ansible_password: NewPassword123!
+      ansible.builtin.command: echo test
+      changed_when: false
+
+    - name: Test vaultuser2 login
+      vars:
+        ansible_user: vaultuser2
+        ansible_password: NewPassword123!
+      ansible.builtin.command: echo test
+      changed_when: false
+
+    - name: Test vaultuser3 login
+      vars:
+        ansible_user: vaultuser3
+        ansible_password: DefaultPassword123!
+      ansible.builtin.command: echo test
+      changed_when: false
+
+    - name: Test vaultuser4 login
+      vars:
+        ansible_user: vaultuser4
+        ansible_password: NewPassword123!
+      ansible.builtin.command: echo test
+      changed_when: false
+
+    - name: Test testuser1 login
+      vars:
+        ansible_user: testuser1
+        ansible_password: NewPassword123!
+      ansible.builtin.command: echo test
+      changed_when: false
+
+    - name: Test testuser2 login
+      vars:
+        ansible_user: testuser2
+        ansible_password: DefaultPassword123!
+      ansible.builtin.command: echo test
+      changed_when: false
+
+    - name: Test testuser3 login
+      vars:
+        ansible_user: testuser3
+        ansible_password: NewPassword123!
+      ansible.builtin.command: echo test
+      changed_when: false
