@@ -1,0 +1,34 @@
+---
+- name: Converge
+  hosts:
+    - localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Test America/New_York
+      ansible.builtin.assert:
+        that:
+          - ('America/New_York' is trippsc2.general.tz)
+        fail_msg: America/New_York is incorrectly not passing the test.
+        success_msg: America/New_York is passing the test.
+
+    - name: Test America/Chicago
+      ansible.builtin.assert:
+        that:
+          - ('America/Chicago' is trippsc2.general.tz)
+        fail_msg: America/Chicago is incorrectly not passing the test.
+        success_msg: America/Chicago is passing the test.
+
+    - name: Test America/Los_Angeles
+      ansible.builtin.assert:
+        that:
+          - ('America/Los_Angeles' is trippsc2.general.tz)
+        fail_msg: America/Los_Angeles is incorrectly not passing the test.
+        success_msg: America/Los_Angeles is passing the test.
+
+    - name: Test America/Not_Valid
+      ansible.builtin.assert:
+        that:
+          - ('America/Not_Valid' is not trippsc2.general.tz)
+        fail_msg: America/Not_Valid is incorrectly passing the test.
+        success_msg: America/Not_Valid is not passing the test.

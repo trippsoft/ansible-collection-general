@@ -1,0 +1,14 @@
+---
+- name: Destroy
+  hosts:
+    - localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Dump instance config
+      ansible.builtin.copy:
+        content: |
+          # Molecule managed
+
+        dest: "{{ molecule_instance_config }}"
+        mode: "0600"
