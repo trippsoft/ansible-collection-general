@@ -10,7 +10,6 @@
     - name: Ensure existing certificate is not expired or about to expire
       block:
         - name: Get certificate content
-          become: true
           ansible.builtin.slurp:
             src: "{{ cert_certificate_path }}"
           register: _cert_existing
@@ -47,7 +46,6 @@
         - cert_backup_replaced_private_key
       block:
         - name: Check if there is existing private key
-          become: true
           ansible.windows.win_stat:
             path: "{{ cert_private_key_path }}"
           register: _cert_existing_priv_key
@@ -55,7 +53,6 @@
         - name: Backup private key
           when:
             - _cert_existing_priv_key.stat.exists
-          become: true
           ansible.windows.win_copy:
             remote_src: true
             src: "{{ cert_private_key_path }}"
@@ -70,7 +67,6 @@
       register: _cert_new_private_key
 
     - name: Copy private key to path
-      become: true
       ansible.windows.win_copy:
         content: "{{ _cert_new_private_key.privatekey }}"
         dest: "{{ cert_private_key_path }}"
@@ -95,7 +91,6 @@
       register: _cert_csr
 
     - name: Copy CSR to path
-      become: true
       ansible.windows.win_copy:
         content: "{{ _cert_csr.csr }}"
         dest: "{{ _cert_csr_tmp_path }}"
