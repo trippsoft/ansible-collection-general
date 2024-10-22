@@ -7,7 +7,6 @@
       - '!all'
       - '!min'
       - distribution
-      - os_family
 
 - name: Validate OS
   ansible.builtin.assert:

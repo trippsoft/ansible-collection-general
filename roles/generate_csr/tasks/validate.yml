@@ -6,6 +6,7 @@
     gather_subset:
       - '!all'
       - '!min'
+      - distribution
       - os_family
 
 - name: Validate OS Family is supported
