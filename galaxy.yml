@@ -1,7 +1,7 @@
 ---
 namespace: trippsc2
 name: general
-version: 2.6.2
+version: 2.6.3
 readme: README.md
 authors:
   - Jim Tarpley
@@ -9,7 +9,9 @@ description: This collection contains general purpose Ansible plugins.
 
 license_file: 'LICENSE'
 
-tags: []
+tags:
+  - infrastructure
+  - tools
 
 dependencies:
   ansible.windows: '>=1.0.0'
