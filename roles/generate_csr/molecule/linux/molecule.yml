@@ -9,7 +9,7 @@ driver:
   parallel: true
 platforms:
   - name: case1 # no existing cert
-    box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
+    box: jtarpley/${MOLECULE_BOX:-rocky9_cis}
     memory: 2048
     cpus: 2
     provider_options:
@@ -17,7 +17,7 @@ platforms:
     groups:
       - subjects
   - name: case2 # existing renewable cert
-    box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
+    box: jtarpley/${MOLECULE_BOX:-rocky9_cis}
     memory: 2048
     cpus: 2
     provider_options:
@@ -25,7 +25,7 @@ platforms:
     groups:
       - subjects
   - name: case3 # existing valid cert
-    box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
+    box: jtarpley/${MOLECULE_BOX:-rocky9_cis}
     memory: 2048
     cpus: 2
     provider_options:
