@@ -1,15 +1,2 @@
 ---
 requires_ansible: '>=2.15.0'
-
-plugin_routing:
-  modules:
-    win_combine_certificates:
-      redirect: trippsc2.windows.win_combine_certificates
-      deprecation:
-        removal_version: '2.3.0'
-        warning_text: Use trippsc2.windows.win_combine_certificates instead.
-    win_package_provider:
-      redirect: trippsc2.windows.win_package_provider
-      deprecation:
-        removal_version: '2.3.0'
-        warning_text: Use trippsc2.windows.win_package_provider instead.

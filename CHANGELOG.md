@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.4] - 2025-02-09
+
+### combine_certificates Module Plugin
+
+- Made several code quality and style changes to the module that were recommended by the Ansible sanity tests.
+
 ## [2.6.3] - 2025-01-08
 
 ### Collection
@@ -11,17 +17,17 @@ All notable changes to this project will be documented in this file.
 
 ## [2.6.2] - 2024-10-22
 
-### Role - generate_csr
+### generate_csr Role
 
 - Added `os_family` subset to fact gathering task.
 
-### Role - rotate_linux_password
+### rotate_linux_password Role
 
 - Removed `os_family` subset from fact gathering task.
 
 ## [2.6.1] - 2024-09-24
 
-### Role - generate_csr
+### generate_csr Role
 
 - Removed `become` option from Windows tasks.
 
@@ -33,7 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.5.1] - 2024-09-06
 
-### Role - rotate_linux_password
+### rotate_linux_password Role
 
 - Added `no_log` option to `rotate_new_password` variable.
 
@@ -43,11 +49,11 @@ All notable changes to this project will be documented in this file.
 
 - *rotate_linux_password* role added.
 
-### Role - generate_csr
+### generate_csr Role
 
 - Corrected Ubuntu versions listed in the role metadata.
 
-### Role - self_signed_certificate
+### self_signed_certificate Role
 
 - Corrected Ubuntu versions listed in the role metadata.
 
@@ -59,57 +65,57 @@ All notable changes to this project will be documented in this file.
 
 ## [2.4.0] - 2024-07-26
 
-### Role - generate_csr
+### generate_csr Role
 
 - Removed defaults for the `cert_private_key_path` and `cert_certificate_path` variables and made them required to prevent unexpected behavior.
 
-### Role - self_signed_certificate
+### self_signed_certificate Role
 
 - Removed defaults for the `cert_private_key_path` and `cert_certificate_path` variables and made them required to prevent unexpected behavior.
 
 ## [2.3.6] - 2024-07-11
 
-### Role - generate_csr
+### generate_csr Role
 
 - Updated documentation and role metadata for readability.
 - Added validation where possible.
 
-### Role - self_signed_certificate
+### self_signed_certificate Role
 
 - Updated documentation and role metadata for readability.
 - Added validation where possible.
 
 ## [2.3.5] - 2024-07-08
 
-### Role - generate_csr
+### generate_csr Role
 
 - Added step to gather facts regarding the OS family.
 
-### Role - self_signed_certificate
+### self_signed_certificate Role
 
 - Added step to gather facts regarding the OS family.
 - Added step to add the `cert_private_key_owner` user to the `ssl-cert` group on Debian-based machines.
 
 ## [2.3.3] - 2024-06-30
 
-### Role - generate_csr
+### generate_csr Role
 
 - Changed references to Red Hat Enterprise Linux (RHEL) to more accurately reference Enterprise Linux (EL) to convey the intention to support derivatives (Rocky/AlmaLinux/etc.)
 
-### Role - self_signed_certificate
+### self_signed_certificate Role
 
 - Changed references to Red Hat Enterprise Linux (RHEL) to more accurately reference Enterprise Linux (EL) to convey the intention to support derivatives (Rocky/AlmaLinux/etc.)
 
 ## [2.3.2] - 2024-06-29
 
-### Role - generate_csr
+### generate_csr Role
 
 - Added `allow_duplicates` to the role metadata.
 - Role refactored to not make use of `ignore_errors` option and instead use `rescue` block.
 
 ## [2.3.1] - 2024-06-27
 
-### Role - generate_csr
+### generate_csr Role
 
 - Role refactored to not make use of `ignore_errors` option when checking for existing certificate.
 
@@ -128,7 +134,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.1.2] - 2024-06-20
 
-### Role - generate_csr
+### generate_csr Role
 
 - Updated documentation and role metadata for readability.
 
@@ -138,7 +144,7 @@ All notable changes to this project will be documented in this file.
 
 - Minimum Ansible version changed from `2.11` to `2.14` due to align with EOL status.
 
-### Role - generate_csr
+### generate_csr Role
 
 - Added support for Debian 11 and 12, EL 9, and Ubuntu 20.04, 22.04, and 24.04 to the role metadata.
 

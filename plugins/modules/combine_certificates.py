@@ -4,40 +4,6 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-DOCUMENTATION = r"""
-module: combine_certificates
-version_added: 1.0.0
-author:
-  - Jim Tarpley
-short_description: Combine multiple certificates into a single file.
-description:
-  - Combines multiple certificates into a single file in order.
-attributes:
-  check_mode:
-    support: full
-    details:
-      - This module supports check mode.
-options:
-  certificates:
-    description:
-      - List of certificates to combine.
-    required: true
-    type: list(str)
-  path:
-    description:
-      - Path to the combined certificate file.
-    required: true
-    type: str
-extends_documentation_fragment:
-  - ansible.builtin.files
-"""
-
-EXAMPLES = r"""
-"""
-
-RETURN = r"""
-"""
-
 import errno
 import os
 
@@ -66,7 +32,7 @@ def main():
     for certificate in module.params['certificates']:
         if expected_content != '':
             expected_content += '\n'
-        
+
         try:
             with open(certificate, 'r') as file:
                 expected_content += file.read()
@@ -85,7 +51,7 @@ def main():
     path = module.params['path']
 
     if os.path.exists(path):
-        
+
         try:
             with open(path, 'r') as file:
                 actual_content = file.read()
@@ -102,11 +68,11 @@ def main():
         actual_content = None
 
     if actual_content is None or expected_content != actual_content:
-        
+
         changed = True
 
         if not module.check_mode:
-            
+
             try:
                 with open(path, 'w') as file:
                     file.write(expected_content)
@@ -134,7 +100,7 @@ def main():
         path,
         mode,
         changed
-    )        
+    )
 
     module.exit_json(changed=changed)
 

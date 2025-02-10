@@ -1,44 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
-
-DOCUMENTATION = r"""
-name: tz
-version_added: 2.6.0
-author:
-  - Jim Tarpley
-short_description: Validates Linux timezone names.
-requirements:
-  - pytz
-description:
-  - This module validates Linux timezone names using the pytz.
-options:
-  _input:
-    type: str
-    required: true
-    description:
-      - The timezone name to validate.
-"""
-
-EXAMPLES = r"""
-- name: Validate timezone
-  ansible.builtin.assert:
-    that:
-      - 'America/New_York' is trippsc2.general.tz
-
-- name: Validate timezone
-  ansible.builtin.assert:
-    that:
-      - 'America/Not_Real' is not trippsc2.general.tz
-"""
-
-RETURN = r"""
-_value:
-  type: bool
-  description: Whether the timezone name is valid.
-"""
 
 from ansible.errors import AnsibleError
 from ansible.module_utils.six import raise_from
@@ -75,7 +37,7 @@ def tz(value) -> bool:
         return False
     except Exception as e:
         raise_from(AnsibleError('An error occurred while validating the timezone name.'), e)
-    
+
     return True
 
 
