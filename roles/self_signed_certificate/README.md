@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.general.self_signed_certificate
-Version: 2.6.4
+Version: 2.6.5
 
 This role generates a self-signed TLS certificate.
 

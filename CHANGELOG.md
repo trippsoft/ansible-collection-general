@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.5] - 2025-02-13
+
+### combine_certificates Module Plugin
+
+- Reverted changing documentation from .py file to .yml file because ansible-lint does not parse it correctly yet.
+
+### tz Test Plugin
+
+- Reverted changing documentation from .py file to .yml file because ansible-lint does not parse it correctly yet.
+
 ## [2.6.4] - 2025-02-09
 
 ### combine_certificates Module Plugin

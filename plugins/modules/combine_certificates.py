@@ -4,6 +4,51 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+DOCUMENTATION = r"""
+module: combine_certificates
+version_added: 1.0.0
+author:
+  - Jim Tarpley (@trippsc2)
+short_description: Combine multiple certificates into a single file.
+description:
+  - Combines multiple certificates into a single file in order.
+attributes:
+  check_mode:
+    support: full
+    description:
+      - This module supports check mode.
+options:
+  certificates:
+    type: list
+    required: true
+    elements: path
+    description:
+      - List of certificates to combine.
+  path:
+    type: path
+    required: true
+    description:
+      - Path to the combined certificate file.
+extends_documentation_fragment:
+  - ansible.builtin.files
+"""
+
+EXAMPLES = r"""
+- name: Combine certificates
+  trippsc2.general.combine_certificates:
+    certificates:
+      - /path/to/cert1.pem
+      - /path/to/cert2.pem
+      - /path/to/cert3.pem
+    path: /path/to/combined.pem
+    owner: root
+    group: root
+    mode: '0600'
+"""
+
+RETURN = r"""
+"""
+
 import errno
 import os
 
