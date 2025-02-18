@@ -1,0 +1,78 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+  cachier: machine
+  parallel: true
+platforms:
+  - name: case1 # no existing cert
+    box: jtarpley/${MOLECULE_BOX:-rocky9_cis}
+    memory: 2048
+    cpus: 2
+    provider_options:
+      default_prefix: generate_csr_linux_pipe_
+    groups:
+      - subjects
+  - name: case2 # existing renewable cert
+    box: jtarpley/${MOLECULE_BOX:-rocky9_cis}
+    memory: 2048
+    cpus: 2
+    provider_options:
+      default_prefix: generate_csr_linux_pipe_
+    groups:
+      - subjects
+  - name: case3 # existing valid cert
+    box: jtarpley/${MOLECULE_BOX:-rocky9_cis}
+    memory: 2048
+    cpus: 2
+    provider_options:
+      default_prefix: generate_csr_linux_pipe_
+    groups:
+      - subjects
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      subjects:
+        _cert_certificate_path: >-
+          {{ '/etc/pki/tls/certs/cert.crt' if ansible_os_family == 'RedHat' else '/etc/ssl/certs/cert.crt' }}
+        _cert_private_key_path: >-
+          {{ '/etc/pki/tls/private/cert.key' if ansible_os_family == 'RedHat' else '/etc/ssl/private/cert.key' }}
+        cert_existing_certificate_type: pipe
+        cert_private_key_to_file: false
+        cert_private_key_to_variable: true
+    host_vars:
+      case1:
+        generate_existing_private_key: false
+        generate_existing_cert: false
+        expected_csr: true
+      case2:
+        generate_existing_private_key: true
+        generate_existing_cert: true
+        existing_cert_duration: +1w
+        expected_csr: true
+      case3:
+        generate_existing_private_key: true
+        generate_existing_cert: true
+        existing_cert_duration: +8w
+        expected_csr: false
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    #- idempotence
+    # Removed idempotence check, because this scenario cannot be made idempotent.
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

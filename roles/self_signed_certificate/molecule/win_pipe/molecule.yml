@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: self_signed_certificate_win_
+      default_prefix: self_signed_certificate_win_pipe_
     groups:
       - subjects
       - windows
@@ -22,9 +22,13 @@ provisioner:
   inventory:
     group_vars:
       subjects:
-        cert_certificate_path: C:\Windows\Temp\cert.crt
-        cert_private_key_path: C:\Windows\Temp\cert.key
-        cert_csr_to_file: false
+        _cert_certificate_path: C:\Windows\Temp\cert.crt
+        _cert_private_key_path: C:\Windows\Temp\cert.key
+        cert_private_key_to_file: false
+        cert_private_key_to_variable: true
+        cert_certificate_to_file: false
+        cert_certificate_to_variable: true
+        cert_existing_certificate_type: pipe
       windows:
         ansible_shell_type: powershell
         ansible_become_method: runas

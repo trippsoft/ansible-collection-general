@@ -1,28 +1,62 @@
 ---
-- name: Check if CSR exists
-  become: true
-  ansible.builtin.stat:
-    path: "{{ _cert_csr_tmp_path }}"
-  register: _cert_csr
-
 - name: Generate CSR and sign certificate
   when:
-    - _cert_csr.stat.exists
+    - cert_csr_content | default('') != ''
   block:
+    - name: Get private key contents from file
+      when:
+        - not cert_private_key_to_variable
+      block:
+        - name: Get private key contents from file
+          become: true
+          ansible.builtin.slurp:
+            src: "{{ cert_private_key_path }}"
+          register: _cert_private_key
+
+        - name: Set private key content variable
+          ansible.builtin.set_fact:
+            cert_private_key_content: "{{ _cert_private_key.content | b64decode }}"
+
     - name: Generate and sign new certificate
-      become: true
-      community.crypto.x509_certificate:
-        path: "{{ cert_certificate_path }}"
-        csr_path: "{{ _cert_csr_tmp_path }}"
-        privatekey_path: "{{ cert_private_key_path }}"
+      delegate_to: localhost
+      community.crypto.x509_certificate_pipe:
+        csr_content: "{{ cert_csr_content }}"
+        privatekey_content: "{{ cert_private_key_content }}"
         provider: selfsigned
+      register: _cert_data
+
+    - name: Clear private key variable contents
+      when:
+        - not cert_private_key_to_variable
+      ansible.builtin.set_fact:
+        cert_private_key_content: ''
+        _cert_private_key: {}
+
+    - name: Set certificate content variable
+      when:
+        - cert_certificate_to_variable
+      ansible.builtin.set_fact:
+        cert_certificate_content: "{{ _cert_data.certificate }}"
+
+    - name: Save certificate to file
+      when:
+        - cert_certificate_to_file
+      become: true
+      ansible.builtin.copy:
+        content: "{{ _cert_data.certificate }}"
+        dest: "{{ cert_certificate_path }}"
         owner: "{{ cert_certificate_owner }}"
         group: "{{ cert_certificate_group }}"
         mode: "{{ cert_certificate_mode }}"
-        force: true
 
     - name: Remove CSR file
+      when:
+        - cert_csr_to_file
       become: true
       ansible.builtin.file:
-        path: "{{ _cert_csr_tmp_path }}"
+        path: "{{ _cert_csr_path }}"
         state: absent
+
+    - name: Clear CSR variable contents
+      ansible.builtin.set_fact:
+        cert_csr_content: ''

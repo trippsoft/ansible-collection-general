@@ -5,7 +5,7 @@ argument_specs:
     description:
       - This role rotates a Linux user password.
     author:
-      - Jim Tarpley
+      - Jim Tarpley (@trippsc2)
     options:
       vault_url:
         type: str

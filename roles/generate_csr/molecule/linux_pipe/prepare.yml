@@ -1,0 +1,76 @@
+---
+- name: Prepare
+  hosts:
+    - subjects
+  tasks:    
+    - name: Create test group
+      become: true
+      ansible.builtin.group:
+        name: test
+        state: present
+
+    - name: Create test user
+      become: true
+      ansible.builtin.user:
+        name: test
+        group: test
+        state: present
+        shell: /bin/bash
+        password: "{{ 'test' | password_hash('sha512') }}"
+        update_password: on_create
+
+    - name: Generate private key
+      when:
+        - generate_existing_private_key
+      block:
+        - name: Install python3 cryptography library
+          become: true
+          ansible.builtin.package:
+            name:
+              - python3-cryptography
+            state: present
+
+        - name: Generate existing private key
+          become: true
+          community.crypto.openssl_privatekey:
+            path: "{{ _cert_private_key_path }}"
+            owner: test
+            group: test
+            mode: '0600'
+            type: RSA
+            size: 2048
+
+    - name: Generate existing certificate
+      when:
+        - generate_existing_cert
+      block:
+        - name: Generate CSR
+          become: true
+          community.crypto.openssl_csr_pipe:
+            privatekey_path: "{{ _cert_private_key_path }}"
+            common_name: "{{ inventory_hostname }}"
+            subject_alt_name:
+              - "DNS:{{ inventory_hostname }}"
+            key_usage:
+              - digitalSignature
+              - keyEncipherment
+            key_usage_critical: true
+            extended_key_usage:
+              - serverAuth
+            extended_key_usage_critical: true
+            basic_constraints: []
+            basic_constraints_critical: true
+          register: _csr_content
+
+        - name: Generate self-signed certificate
+          become: true
+          community.crypto.x509_certificate:
+            path: "{{ _cert_certificate_path }}"
+            csr_content: "{{ _csr_content.csr }}"
+            privatekey_path: "{{ _cert_private_key_path }}"
+            provider: selfsigned
+            owner: test
+            group: test
+            mode: '0644'
+            force: true
+            selfsigned_not_after: "{{ existing_cert_duration }}"

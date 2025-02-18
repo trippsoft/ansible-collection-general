@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.general.rotate_linux_password
-Version: 2.6.5
+Version: 2.7.0
 
 This role rotates a Linux user password.
 
@@ -35,5 +35,5 @@ None.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

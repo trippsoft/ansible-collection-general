@@ -4,8 +4,16 @@ argument_specs:
     short_description: Generate CSR
     description:
       - This role generates a Certificate Signing Request (CSR) for a Linux or Windows machine, if an existing certificate doesn't exist or needs renewal.
+      - The role should be used in conjunction with another role to sign the CSR and generate a certificate.
+      - |
+        This role does the following:
+          - Checks if a certificate exists.
+          - If the certificate does not exist or is near expiration, the role generates a private key and stores it in the `cert_private_key_content` variable.
+          - Optionally, the role will save the private key to a file and backup the replaced private key.
+          - If the certificate does not exist or is near expiration, the role generates a CSR and stores it at `cert_csr_content`.
+          - Optionally, the role will save the CSR to a file.
     author:
-      - Jim Tarpley
+      - Jim Tarpley (@trippsc2)
     options:
       cert_force_regenerate:
         type: bool
@@ -14,22 +22,55 @@ argument_specs:
         description:
           - Whether to force regeneration of the CSR, even if the certificate is not near expiration.
           - If set to `true`, the role will not be idempotent.
+      cert_existing_certificate_type:
+        type: str
+        required: false
+        default: file
+        choices:
+          - file
+          - pipe
+        description:
+          - The type of existing certificate to evaluate.
+          - If set to `file`, the role will check the certificate file at `cert_certificate_path` making that variable required.
+          - If set to `pipe`, the role will check the certificate content at `cert_existing_certificate_content`.  If that variable is not provided, the role will generate a new CSR.
       cert_certificate_path:
         type: path
-        required: true
+        required: false
         description:
           - The path to the certificate file to generate.
+          - If *cert_existing_certificate_type* is `file`, this is required.
+      cert_existing_certificate_content:
+        type: str
+        required: false
+        description:
+          - The content of the existing certificate.
+          - If this is provided and *cert_existing_certificate_type* is `pipe`, the certificate will be evaluated for expiration before proceeding.
+          - If this is not provided and *cert_existing_certificate_type* is `pipe`, the role will generate a new CSR.
       cert_regenerate_days:
         type: int
         required: false
         default: 30
         description:
           - The number of days before the certificate expiration to regenerate the CSR.
+      cert_private_key_to_file:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to generate a private key to a file.
+      cert_private_key_to_variable:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to generate a private key to a variable.
+          - If set to `true`, the role will store the private key in the `cert_private_key_content` variable.
       cert_private_key_path:
         type: path
-        required: true
+        required: false
         description:
           - The path to the private key file to generate.
+          - If *cert_private_key_to_file* is `true`, this is required.
       cert_private_key_owner:
         type: str
         required: false
@@ -103,6 +144,7 @@ argument_specs:
         default: true
         description:
           - Whether to backup the replaced private key.
+          - If *cert_private_key_to_file* is `false`, this is ignored.
       cert_common_name:
         type: str
         required: false
@@ -193,10 +235,39 @@ argument_specs:
         default: true
         description:
           - Whether the basic constraints are critical.
-      cert_csr_tmp_path:
+      cert_csr_to_file:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to generate a CSR to a file.
+          - If set to `true`, the role will write the CSR to a file path specified at `cert_csr_path`.
+      cert_csr_path:
         type: path
         required: false
         description:
           - The path to the CSR file to generate.
+          - If *cert_csr_to_file* is `false`, this is ignored.
           - For Linux systems, this defaults to `/tmp/cert.csr`.
           - For Windows systems, this defaults to `C:\Windows\Temp\cert.csr`.
+      cert_csr_owner:
+        type: str
+        required: false
+        default: "{{ ansible_user }}"
+        description:
+          - The owner of the CSR on Linux systems.
+          - On Windows systems, this is ignored.
+      cert_csr_group:
+        type: str
+        required: false
+        default: "{{ ansible_user }}"
+        description:
+          - The group of the CSR on Linux systems.
+          - On Windows systems, this is ignored.
+      cert_csr_mode:
+        type: str
+        required: false
+        default: '0644'
+        description:
+          - The mode of the CSR on Linux systems.
+          - On Windows systems, this is ignored.

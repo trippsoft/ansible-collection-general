@@ -4,3 +4,13 @@
     - subjects
   roles:
     - trippsc2.general.generate_csr
+  tasks:
+    - name: Copy CSR content to file
+      when:
+        - cert_csr_content | default('') != ''
+      ansible.builtin.copy:
+        content: "{{ cert_csr_content }}"
+        dest: /tmp/cert.csr
+        owner: vagrant
+        group: vagrant
+        mode: '0644'

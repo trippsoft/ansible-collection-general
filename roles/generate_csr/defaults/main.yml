@@ -1,8 +1,11 @@
 ---
 cert_force_regenerate: false
 
+cert_existing_certificate_type: file
 cert_regenerate_days: 30
 
+cert_private_key_to_file: true
+cert_private_key_to_variable: false
 cert_private_key_owner: root
 cert_private_key_group: root
 cert_private_key_mode: '0600'
@@ -26,3 +29,8 @@ cert_extended_key_usage_critical: true
 
 cert_basic_constraints: []
 cert_basic_constraints_critical: true
+
+cert_csr_to_file: false
+cert_csr_owner: "{{ ansible_user }}"
+cert_csr_group: "{{ ansible_user }}"
+cert_csr_mode: '0644'

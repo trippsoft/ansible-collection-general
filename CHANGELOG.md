@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0] - 2025-02-18
+
+### generate_csr Role
+
+- Restructured role to make writing the CSR and private key to files optional.
+
+### self_signed_certificate Role
+
+- Restructured role to compliment changes in *generate_csr* role and to make saving the certificate to a file optional.
+
 ## [2.6.5] - 2025-02-13
 
 ### combine_certificates Module Plugin

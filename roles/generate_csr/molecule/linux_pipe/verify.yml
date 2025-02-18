@@ -6,7 +6,7 @@
   tasks:
     - name: Get private key file info
       ansible.builtin.stat:
-        path: "{{ cert_private_key_path }}"
+        path: "{{ _cert_private_key_path }}"
       register: _private_key_info
 
     - name: Get CSR file info
@@ -24,21 +24,21 @@
     - name: Verify private key owner
       ansible.builtin.assert:
         that:
-          - _private_key_info.stat.pw_name == cert_private_key_owner | default('root')
+          - _private_key_info.stat.pw_name == 'test'
         fail_msg: Private key file does not have expected owner.
         success_msg: Private key file has expected owner.
 
     - name: Verify private key group
       ansible.builtin.assert:
         that:
-          - _private_key_info.stat.gr_name == cert_private_key_group | default('root')
+          - _private_key_info.stat.gr_name == 'test'
         fail_msg: Private key file does not have expected group.
         success_msg: Private key file has expected group.
 
     - name: Verify private key mode
       ansible.builtin.assert:
         that:
-          - _private_key_info.stat.mode == cert_private_key_mode | default('0600')
+          - _private_key_info.stat.mode == '0600'
         fail_msg: Private key file does not have expected mode.
         success_msg: Private key file has expected mode.
 

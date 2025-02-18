@@ -1,4 +1,11 @@
 ---
+- name: Remove existing CSR, if needed
+  when:
+    - cert_csr_to_file
+  ansible.windows.win_file:
+    path: "{{ _cert_csr_path }}"
+    state: absent
+
 - name: Set variables to indicate whether to generate private key or CSR
   ansible.builtin.set_fact:
     _cert_generate_csr: "{{ cert_force_regenerate }}"
@@ -7,35 +14,68 @@
   when:
     - not _cert_generate_csr
   block:
-    - name: Ensure existing certificate is not expired or about to expire
+    - name: Ensure existing certificate is not expired or about to expire (file)
+      when:
+        - cert_existing_certificate_type == 'file'
       block:
         - name: Get certificate content
           ansible.builtin.slurp:
             src: "{{ cert_certificate_path }}"
-          register: _cert_existing
+          register: _cert_data
 
         - name: Check existing certificate information
           when:
-            - not _cert_existing.failed
-            - _cert_existing.content is defined
+            - _cert_data.content is defined
           delegate_to: localhost
           community.crypto.x509_certificate_info:
-            content: "{{ _cert_existing.content | b64decode }}"
+            content: "{{ _cert_data.content | b64decode }}"
             valid_at:
               point_1: "+0d"
               point_2: "+{{ cert_regenerate_days }}d"
-          register: _cert_existing_cert
+          register: _cert_existing
 
         - name: Set variable to indicate whether to generate CSR
           when:
-            - not _cert_existing_cert.valid_at.point_1 or
-              not _cert_existing_cert.valid_at.point_2
+            - not _cert_existing.valid_at.point_1 or
+              not _cert_existing.valid_at.point_2
           ansible.builtin.set_fact:
             _cert_generate_csr: true
       rescue:
         - name: Set variable to indicate whether to generate CSR
           ansible.builtin.set_fact:
             _cert_generate_csr: true
+
+    - name: Ensure existing certificate is not expired or about to expire (pipe)
+      when:
+        - cert_existing_certificate_type == 'pipe'
+        - cert_existing_certificate_content is defined
+      block:
+        - name: Check existing certificate information
+          delegate_to: localhost
+          community.crypto.x509_certificate_info:
+            content: "{{ cert_existing_certificate_content }}"
+            valid_at:
+              point_1: "+0d"
+              point_2: "+{{ cert_regenerate_days }}d"
+          register: _cert_existing
+
+        - name: Set variable to indicate whether to generate CSR
+          when:
+            - not _cert_existing.valid_at.point_1 or
+              not _cert_existing.valid_at.point_2
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
+      rescue:
+        - name: Set variable to indicate whether to generate CSR
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
+
+    - name: Ensure CSR is generated when no existing certificate exists (pipe)
+      when:
+        - cert_existing_certificate_type == 'pipe'
+        - cert_existing_certificate_content is not defined
+      ansible.builtin.set_fact:
+        _cert_generate_csr: true
 
 - name: Generate private key and CSR
   when:
@@ -44,6 +84,7 @@
     - name: Backup private key, if it exists
       when:
         - cert_backup_replaced_private_key
+        - cert_private_key_to_file
       block:
         - name: Check if there is existing private key
           ansible.windows.win_stat:
@@ -66,7 +107,15 @@
         curve: "{{ _cert_private_key_curve }}"
       register: _cert_new_private_key
 
+    - name: Set private key content variable
+      when:
+        - cert_private_key_to_variable
+      ansible.builtin.set_fact:
+        cert_private_key_content: "{{ _cert_new_private_key.privatekey }}"
+
     - name: Copy private key to path
+      when:
+        - cert_private_key_to_file
       ansible.windows.win_copy:
         content: "{{ _cert_new_private_key.privatekey }}"
         dest: "{{ cert_private_key_path }}"
@@ -90,7 +139,13 @@
         basic_constraints_critical: "{{ cert_basic_constraints_critical }}"
       register: _cert_csr
 
-    - name: Copy CSR to path
+    - name: Set CSR content variable
+      ansible.builtin.set_fact:
+        cert_csr_content: "{{ _cert_csr.csr }}"
+
+    - name: Copy CSR to path # This is done for backward compatibility. Use cert_csr_content instead.
+      when:
+        - cert_csr_to_file
       ansible.windows.win_copy:
-        content: "{{ _cert_csr.csr }}"
-        dest: "{{ _cert_csr_tmp_path }}"
+        content: "{{ cert_csr_content }}"
+        dest: "{{ _cert_csr_path }}"

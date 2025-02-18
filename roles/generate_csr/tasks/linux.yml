@@ -1,15 +1,10 @@
 ---
-- name: Install cryptography python library
-  become: true
-  ansible.builtin.package:
-    name:
-      - python3-cryptography
-    state: present
-
 - name: Remove existing CSR, if needed
+  when:
+    - cert_csr_to_file
   become: true
   ansible.builtin.file:
-    path: "{{ _cert_csr_tmp_path }}"
+    path: "{{ _cert_csr_path }}"
     state: absent
 
 - name: Set variables to indicate whether to generate private key and CSR
@@ -19,13 +14,21 @@
 - name: Check existing certificate
   when:
     - not _cert_generate_csr
-  become: true
   block:
-    - name: Ensure existing certificate is not expired or about to expire
+    - name: Ensure existing certificate is not expired or about to expire (file)
+      when:
+        - cert_existing_certificate_type == 'file'
       block:
+        - name: Get existing certificate information
+          become: true
+          ansible.builtin.slurp:
+            src: "{{ cert_certificate_path }}"
+          register: _cert_data
+
         - name: Check existing certificate information
+          delegate_to: localhost
           community.crypto.x509_certificate_info:
-            path: "{{ cert_certificate_path }}"
+            content: "{{ _cert_data.content | b64decode }}"
             valid_at:
               point_1: "+0d"
               point_2: "+{{ cert_regenerate_days }}d"
@@ -42,26 +45,95 @@
           ansible.builtin.set_fact:
             _cert_generate_csr: true
 
+    - name: Ensure existing certificate is not expired or about to expire (pipe)
+      when:
+        - cert_existing_certificate_type == 'pipe'
+        - cert_existing_certificate_content is defined
+      block:
+        - name: Check existing certificate information
+          delegate_to: localhost
+          community.crypto.x509_certificate_info:
+            content: "{{ cert_existing_certificate_content }}"
+            valid_at:
+              point_1: "+0d"
+              point_2: "+{{ cert_regenerate_days }}d"
+          register: _cert_existing
+
+        - name: Set variable to indicate to generate CSR
+          when:
+            - not _cert_existing.valid_at.point_1 or
+              not _cert_existing.valid_at.point_2
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
+      rescue:
+        - name: Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
+          ansible.builtin.set_fact:
+            _cert_generate_csr: true
+
+    - name: Ensure CSR is generated when no existing certificate exists (pipe)
+      when:
+        - cert_existing_certificate_type == 'pipe'
+        - cert_existing_certificate_content is not defined
+      ansible.builtin.set_fact:
+        _cert_generate_csr: true
+
 - name: Set variable to indicate to generate a new private key
   when:
     - _cert_generate_csr
-  become: true
   block:
-    - name: Ensure private key has been generated
-      community.crypto.openssl_privatekey:
+    - name: Check if private key exists
+      when:
+        - cert_private_key_to_file
+        - cert_backup_replaced_private_key
+      become: true
+      ansible.builtin.stat:
         path: "{{ cert_private_key_path }}"
+      register: _cert_private_key_info
+
+    - name: Copy private key to backup file
+      when:
+        - cert_private_key_to_file
+        - cert_backup_replaced_private_key
+        - _cert_private_key_info.stat.exists
+      become: true
+      ansible.builtin.copy:
+        src: "{{ cert_private_key_path }}"
+        dest: "{{ cert_private_key_path }}.bak"
         owner: "{{ cert_private_key_owner }}"
         group: "{{ cert_private_key_group }}"
         mode: "{{ cert_private_key_mode }}"
+        remote_src: true
+
+    - name: Ensure private key has been generated
+      delegate_to: localhost
+      community.crypto.openssl_privatekey_pipe:
         type: "{{ cert_private_key_type }}"
         size: "{{ _cert_private_key_size }}"
         curve: "{{ _cert_private_key_curve }}"
-        backup: "{{ cert_backup_replaced_private_key }}"
         regenerate: always
+      register: _cert_private_key
+
+    - name: Set private key content variable
+      when:
+        - cert_private_key_to_variable
+      ansible.builtin.set_fact:
+        cert_private_key_content: "{{ _cert_private_key.privatekey }}"
+
+    - name: Save private key to file
+      when:
+        - cert_private_key_to_file
+      become: true
+      ansible.builtin.copy:
+        content: "{{ _cert_private_key.privatekey }}"
+        dest: "{{ cert_private_key_path }}"
+        owner: "{{ cert_private_key_owner }}"
+        group: "{{ cert_private_key_group }}"
+        mode: "{{ cert_private_key_mode }}"
 
     - name: Generate a new CSR
-      community.crypto.openssl_csr:
-        privatekey_path: "{{ cert_private_key_path }}"
+      delegate_to: localhost
+      community.crypto.openssl_csr_pipe:
+        privatekey_content: "{{ _cert_private_key.privatekey }}"
         common_name: "{{ cert_common_name }}"
         subject_alt_name: "{{ cert_subject_alternative_names }}"
         organization_name: "{{ cert_organization_name | default(omit) }}"
@@ -75,4 +147,19 @@
         extended_key_usage_critical: "{{ cert_extended_key_usage_critical }}"
         basic_constraints: "{{ cert_basic_constraints }}"
         basic_constraints_critical: "{{ cert_basic_constraints_critical }}"
-        path: "{{ _cert_csr_tmp_path }}"
+      register: _cert_csr
+
+    - name: Set CSR content variable
+      ansible.builtin.set_fact:
+        cert_csr_content: "{{ _cert_csr.csr }}"
+
+    - name: Save CSR to temporary file # This is done for backward compatibility. Use cert_csr_content instead.
+      when:
+        - cert_csr_to_file
+      become: true
+      ansible.builtin.copy:
+        content: "{{ cert_csr_content }}"
+        dest: "{{ _cert_csr_path }}"
+        owner: "{{ cert_csr_owner }}"
+        group: "{{ cert_csr_group }}"
+        mode: "{{ cert_csr_mode }}"

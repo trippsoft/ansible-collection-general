@@ -1,9 +1,17 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.general.self_signed_certificate
-Version: 2.6.5
+Version: 2.7.0
 
 This role generates a self-signed TLS certificate.
+
+The role depends on the `trippsc2.general.generate_csr` role to generate a private key and CSR.
+
+The role does the following:
+  - Runs the `trippsc2.general.generate_csr` role to generate a private key and CSR, if needed.
+  - If the private key and CSR are generated, the role generates a self-signed certificate and stores it in the `cert_certificate_content` variable.
+  - Optionally, the role will save the certificate to a file.
+
 
 ## Requirements
 
@@ -27,6 +35,8 @@ This role generates a self-signed TLS certificate.
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
+| cert_certificate_to_file | <p>Whether to generate the certificate to a file.</p><p>If set to `true`, the certificate will be stored in the `cert_certificate_content` variable.</p> | bool | no |  | True |
+| cert_certificate_path | <p>The path to the certificate file to generate.</p><p>If *cert_certificate_to_file* is `true`, this is required.</p> | path | no |  |  |
 | cert_certificate_owner | <p>The owner of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
 | cert_certificate_group | <p>The group of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
 | cert_certificate_mode | <p>The mode of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | 0644 |
@@ -36,5 +46,5 @@ This role generates a self-signed TLS certificate.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

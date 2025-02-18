@@ -3,4 +3,4 @@
   hosts:
     - subjects
   roles:
-    - trippsc2.general.self_signed_certificate
+    - role: trippsc2.general.self_signed_certificate

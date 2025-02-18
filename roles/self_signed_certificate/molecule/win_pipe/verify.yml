@@ -5,18 +5,18 @@
   tasks:
   - name: Get private key file info
     ansible.windows.win_stat:
-      path: "{{ cert_private_key_path }}"
+      path: "{{ _cert_private_key_path }}"
     register: _private_key_info
 
   - name: Get certificate file info
     ansible.windows.win_stat:
-      path: "{{ cert_certificate_path }}"
+      path: "{{ _cert_certificate_path }}"
     register: _certificate_info
 
   - name: Get CSR file info
     ansible.windows.win_stat:
-      path: "{{ cert_csr_path | default('C:\\Windows\\Temp\\cert.csr') }}"
-    register: csr_info
+      path: C:\Windows\Temp\cert.csr
+    register: _csr_info
 
   - name: Assert that private key exists
     ansible.builtin.assert:
@@ -35,6 +35,6 @@
   - name: Assert that CSR does not exist
     ansible.builtin.assert:
       that:
-        - not csr_info.stat.exists
-      fail_msg: CSR was not deleted.
-      success_msg: CSR was deleted.
+        - not _csr_info.stat.exists
+      fail_msg: CSR still exists.
+      success_msg: CSR does not exist.

@@ -1,13 +1,23 @@
 ---
 galaxy_info:
-  author: Jim Tarpley
+  author: Jim Tarpley (@trippsc2)
   namespace: trippsc2
   role_name: generate_csr
-  description: This role generates a Certificate Signing Request (CSR) for a Linux or Windows machine, if an existing certificate doesn't exist or needs renewal.
+  description: |
+    This role generates a Certificate Signing Request (CSR) for a Linux or Windows machine, if an existing certificate doesn't exist or needs renewal.
+
+    The role should be used in conjunction with another role to sign the CSR and generate a certificate.
+
+    This role does the following:
+      - Checks if a certificate exists.
+      - If the certificate does not exist or is near expiration, the role generates a private key and stores it at `cert_private_key_content`.
+      - Optionally, the role will save the private key to a file and backup the replaced private key.
+      - If the certificate does not exist or is near expiration, the role generates a CSR and stores it at `cert_csr_content`.
+      - Optionally, the role will save the CSR to a file.
 
   license: MIT
 
-  min_ansible_version: '2.15'
+  min_ansible_version: '2.16'
 
   platforms:
     - name: Debian
