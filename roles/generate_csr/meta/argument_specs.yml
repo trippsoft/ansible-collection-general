@@ -65,6 +65,13 @@ argument_specs:
         description:
           - Whether to generate a private key to a variable.
           - If set to `true`, the role will store the private key in the `cert_private_key_content` variable.
+      cert_private_key_passphrase:
+        type: str
+        no_log: true
+        required: false
+        description:
+          - The passphrase to use when decrypting the private key.
+          - If not provided, the private key will not be encrypted.
       cert_private_key_path:
         type: path
         required: false
@@ -235,39 +242,3 @@ argument_specs:
         default: true
         description:
           - Whether the basic constraints are critical.
-      cert_csr_to_file:
-        type: bool
-        required: false
-        default: false
-        description:
-          - Whether to generate a CSR to a file.
-          - If set to `true`, the role will write the CSR to a file path specified at `cert_csr_path`.
-      cert_csr_path:
-        type: path
-        required: false
-        description:
-          - The path to the CSR file to generate.
-          - If *cert_csr_to_file* is `false`, this is ignored.
-          - For Linux systems, this defaults to `/tmp/cert.csr`.
-          - For Windows systems, this defaults to `C:\Windows\Temp\cert.csr`.
-      cert_csr_owner:
-        type: str
-        required: false
-        default: "{{ ansible_user }}"
-        description:
-          - The owner of the CSR on Linux systems.
-          - On Windows systems, this is ignored.
-      cert_csr_group:
-        type: str
-        required: false
-        default: "{{ ansible_user }}"
-        description:
-          - The group of the CSR on Linux systems.
-          - On Windows systems, this is ignored.
-      cert_csr_mode:
-        type: str
-        required: false
-        default: '0644'
-        description:
-          - The mode of the CSR on Linux systems.
-          - On Windows systems, this is ignored.

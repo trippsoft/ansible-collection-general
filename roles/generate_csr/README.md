@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.general.generate_csr
-Version: 2.7.0
+Version: 2.8.0
 
 This role generates a Certificate Signing Request (CSR) for a Linux or Windows machine, if an existing certificate doesn't exist or needs renewal.
 
@@ -41,6 +41,7 @@ This role does the following:
 | cert_regenerate_days | <p>The number of days before the certificate expiration to regenerate the CSR.</p> | int | no |  | 30 |
 | cert_private_key_to_file | <p>Whether to generate a private key to a file.</p> | bool | no |  | True |
 | cert_private_key_to_variable | <p>Whether to generate a private key to a variable.</p><p>If set to `true`, the role will store the private key in the `cert_private_key_content` variable.</p> | bool | no |  | False |
+| cert_private_key_passphrase | <p>The passphrase to use when decrypting the private key.</p><p>If not provided, the private key will not be encrypted.</p> | str | no |  |  |
 | cert_private_key_path | <p>The path to the private key file to generate.</p><p>If *cert_private_key_to_file* is `true`, this is required.</p> | path | no |  |  |
 | cert_private_key_owner | <p>The owner of the private key on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
 | cert_private_key_group | <p>The group of the private key on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
@@ -62,11 +63,6 @@ This role does the following:
 | cert_extended_key_usage_critical | <p>Whether the extended key usage is critical.</p> | bool | no |  | True |
 | cert_basic_constraints | <p>The basic constraints of the certificate.</p> | list of 'str' | no |  |  |
 | cert_basic_constraints_critical | <p>Whether the basic constraints are critical.</p> | bool | no |  | True |
-| cert_csr_to_file | <p>Whether to generate a CSR to a file.</p><p>If set to `true`, the role will write the CSR to a file path specified at `cert_csr_path`.</p> | bool | no |  | False |
-| cert_csr_path | <p>The path to the CSR file to generate.</p><p>If *cert_csr_to_file* is `false`, this is ignored.</p><p>For Linux systems, this defaults to `/tmp/cert.csr`.</p><p>For Windows systems, this defaults to `C:\Windows\Temp\cert.csr`.</p> | path | no |  |  |
-| cert_csr_owner | <p>The owner of the CSR on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | {{ ansible_user }} |
-| cert_csr_group | <p>The group of the CSR on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | {{ ansible_user }} |
-| cert_csr_mode | <p>The mode of the CSR on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | 0644 |
 
 
 ## License

@@ -47,3 +47,10 @@ argument_specs:
         description:
           - The mode of the certificate on Linux systems.
           - On Windows systems, this is ignored.
+      cert_not_after:
+        type: str
+        required: false
+        description:
+          - The date and time when the certificate will expire.
+          - Refer to the **community.crypto.x509_certificate** module for the format.
+          - If not provided, the certificate will expire in 3650 days.

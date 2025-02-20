@@ -7,5 +7,3 @@ cert_certificate_to_variable: false
 cert_certificate_owner: root
 cert_certificate_group: root
 cert_certificate_mode: '0644'
-
-cert_csr_to_file: true

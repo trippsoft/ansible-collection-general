@@ -29,8 +29,3 @@ cert_extended_key_usage_critical: true
 
 cert_basic_constraints: []
 cert_basic_constraints_critical: true
-
-cert_csr_to_file: false
-cert_csr_owner: "{{ ansible_user }}"
-cert_csr_group: "{{ ansible_user }}"
-cert_csr_mode: '0644'

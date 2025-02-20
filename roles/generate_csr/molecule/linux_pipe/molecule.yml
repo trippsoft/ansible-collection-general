@@ -44,6 +44,7 @@ provisioner:
         cert_existing_certificate_type: pipe
         cert_private_key_to_file: false
         cert_private_key_to_variable: true
+        cert_private_key_passphrase: SecurePassphrase123!
     host_vars:
       case1:
         generate_existing_private_key: false

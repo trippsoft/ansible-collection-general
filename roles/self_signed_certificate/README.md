@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.general.self_signed_certificate
-Version: 2.7.0
+Version: 2.8.0
 
 This role generates a self-signed TLS certificate.
 
@@ -40,6 +40,7 @@ The role does the following:
 | cert_certificate_owner | <p>The owner of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
 | cert_certificate_group | <p>The group of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | root |
 | cert_certificate_mode | <p>The mode of the certificate on Linux systems.</p><p>On Windows systems, this is ignored.</p> | str | no |  | 0644 |
+| cert_not_after | <p>The date and time when the certificate will expire.</p><p>Refer to the **community.crypto.x509_certificate** module for the format.</p><p>If not provided, the certificate will expire in 3650 days.</p> | str | no |  |  |
 
 
 ## License

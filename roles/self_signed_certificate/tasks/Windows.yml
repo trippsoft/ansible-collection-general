@@ -21,6 +21,7 @@
       community.crypto.x509_certificate_pipe:
         csr_content: "{{ cert_csr_content }}"
         privatekey_content: "{{ cert_private_key_content }}"
+        privatekey_passphrase: "{{ cert_private_key_passphrase | default(omit) }}"
         provider: selfsigned
       register: _cert_data
 
@@ -43,13 +44,6 @@
       ansible.windows.win_copy:
         content: "{{ _cert_data.certificate }}"
         dest: "{{ cert_certificate_path }}"
-
-    - name: Remove CSR file
-      when:
-        - cert_csr_to_file
-      ansible.windows.win_file:
-        path: "{{ _cert_csr_path }}"
-        state: absent
 
     - name: Clear CSR variable contents
       ansible.builtin.set_fact:

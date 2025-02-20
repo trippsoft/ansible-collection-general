@@ -29,5 +29,6 @@ provisioner:
         cert_private_key_group: test
         cert_certificate_owner: test
         cert_certificate_group: test
+        cert_private_key_passphrase: SecurePassphrase123!
 verifier:
   name: ansible

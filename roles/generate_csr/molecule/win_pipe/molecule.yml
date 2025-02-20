@@ -45,6 +45,7 @@ provisioner:
         cert_existing_certificate_type: pipe
         cert_private_key_to_file: false
         cert_private_key_to_variable: true
+        cert_private_key_passphrase: SecurePassphrase123!
       windows:
         ansible_shell_type: powershell
         ansible_become_method: runas

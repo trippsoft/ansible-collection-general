@@ -22,7 +22,9 @@
       community.crypto.x509_certificate_pipe:
         csr_content: "{{ cert_csr_content }}"
         privatekey_content: "{{ cert_private_key_content }}"
+        privatekey_passphrase: "{{ cert_private_key_passphrase | default(omit) }}"
         provider: selfsigned
+        selfsigned_not_after: "{{ cert_not_after | default(omit) }}"
       register: _cert_data
 
     - name: Clear private key variable contents
@@ -48,14 +50,6 @@
         owner: "{{ cert_certificate_owner }}"
         group: "{{ cert_certificate_group }}"
         mode: "{{ cert_certificate_mode }}"
-
-    - name: Remove CSR file
-      when:
-        - cert_csr_to_file
-      become: true
-      ansible.builtin.file:
-        path: "{{ _cert_csr_path }}"
-        state: absent
 
     - name: Clear CSR variable contents
       ansible.builtin.set_fact:

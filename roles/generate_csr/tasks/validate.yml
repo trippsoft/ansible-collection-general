@@ -16,9 +16,6 @@
     fail_msg: "OS Family '{{ ansible_os_family }}' is not supported."
     success_msg: "OS Family '{{ ansible_os_family }}' is supported."
 
-- name: Include OS family variables
-  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
-
 - name: Get OS user data
   when:
     - ansible_os_family != 'Windows'

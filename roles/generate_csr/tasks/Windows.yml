@@ -1,11 +1,4 @@
 ---
-- name: Remove existing CSR, if needed
-  when:
-    - cert_csr_to_file
-  ansible.windows.win_file:
-    path: "{{ _cert_csr_path }}"
-    state: absent
-
 - name: Set variables to indicate whether to generate private key or CSR
   ansible.builtin.set_fact:
     _cert_generate_csr: "{{ cert_force_regenerate }}"
@@ -102,6 +95,7 @@
     - name: Generate private key
       delegate_to: localhost
       community.crypto.openssl_privatekey_pipe:
+        passphrase: "{{ cert_private_key_passphrase | default(omit) }}"
         type: "{{ cert_private_key_type }}"
         size: "{{ _cert_private_key_size }}"
         curve: "{{ _cert_private_key_curve }}"
@@ -124,6 +118,7 @@
       delegate_to: localhost
       community.crypto.openssl_csr_pipe:
         privatekey_content: "{{ _cert_new_private_key.privatekey }}"
+        privatekey_passphrase: "{{ cert_private_key_passphrase | default(omit) }}"
         common_name: "{{ cert_common_name }}"
         subject_alt_name: "{{ cert_subject_alternative_names }}"
         organization_name: "{{ cert_organization_name | default(omit) }}"
@@ -142,10 +137,3 @@
     - name: Set CSR content variable
       ansible.builtin.set_fact:
         cert_csr_content: "{{ _cert_csr.csr }}"
-
-    - name: Copy CSR to path # This is done for backward compatibility. Use cert_csr_content instead.
-      when:
-        - cert_csr_to_file
-      ansible.windows.win_copy:
-        content: "{{ cert_csr_content }}"
-        dest: "{{ _cert_csr_path }}"

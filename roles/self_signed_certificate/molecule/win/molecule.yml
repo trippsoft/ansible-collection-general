@@ -24,7 +24,7 @@ provisioner:
       subjects:
         cert_certificate_path: C:\Windows\Temp\cert.crt
         cert_private_key_path: C:\Windows\Temp\cert.key
-        cert_csr_to_file: false
+        cert_private_key_passphrase: SecurePassphrase123!
       windows:
         ansible_shell_type: powershell
         ansible_become_method: runas

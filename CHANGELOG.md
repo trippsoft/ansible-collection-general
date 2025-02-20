@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.0] - 2025-02-20
+
+### generate_csr Role
+
+- Added `cert_private_key_passphrase` option to allow the private key to be encrypted.
+- Added support for Nobara Linux to allow for local testing of the role in certain contexts.
+- Removed all support for CSR to file.  If this is needed, copy the contents of `cert_csr_content` to a file using a task.
+
+### self_signed_certificate Role
+
+- Added `cert_private_key_passphrase` option to allow the private key to be encrypted.
+- Added support for Nobara Linux to allow for local testing of the role in certain contexts.
+- Removed all support for CSR to file.  If this is needed, copy the contents of `cert_csr_content` to a file using a task.
+
 ## [2.7.0] - 2025-02-18
 
 ### generate_csr Role
