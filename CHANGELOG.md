@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [2.8.0] - 2025-02-20
 
-### generate_csr Role
+### Role - generate_csr
 
 - Added `cert_private_key_passphrase` option to allow the private key to be encrypted.
 - Added support for Nobara Linux to allow for local testing of the role in certain contexts.
 - Removed all support for CSR to file.  If this is needed, copy the contents of `cert_csr_content` to a file using a task.
 
-### self_signed_certificate Role
+### Role - self_signed_certificate
 
 - Added `cert_private_key_passphrase` option to allow the private key to be encrypted.
 - Added support for Nobara Linux to allow for local testing of the role in certain contexts.
@@ -18,27 +18,27 @@ All notable changes to this project will be documented in this file.
 
 ## [2.7.0] - 2025-02-18
 
-### generate_csr Role
+### Role - generate_csr
 
 - Restructured role to make writing the CSR and private key to files optional.
 
-### self_signed_certificate Role
+### Role - self_signed_certificate
 
 - Restructured role to compliment changes in *generate_csr* role and to make saving the certificate to a file optional.
 
 ## [2.6.5] - 2025-02-13
 
-### combine_certificates Module Plugin
+### Module Plugin - combine_certificates
 
 - Reverted changing documentation from .py file to .yml file because ansible-lint does not parse it correctly yet.
 
-### tz Test Plugin
+### Test Plugin - tz
 
 - Reverted changing documentation from .py file to .yml file because ansible-lint does not parse it correctly yet.
 
 ## [2.6.4] - 2025-02-09
 
-### combine_certificates Module Plugin
+### Module Plugin - combine_certificates
 
 - Made several code quality and style changes to the module that were recommended by the Ansible sanity tests.
 
@@ -51,17 +51,17 @@ All notable changes to this project will be documented in this file.
 
 ## [2.6.2] - 2024-10-22
 
-### generate_csr Role
+### Role - generate_csr
 
 - Added `os_family` subset to fact gathering task.
 
-### rotate_linux_password Role
+### Role - rotate_linux_password
 
 - Removed `os_family` subset from fact gathering task.
 
 ## [2.6.1] - 2024-09-24
 
-### generate_csr Role
+### Role - generate_csr
 
 - Removed `become` option from Windows tasks.
 
@@ -73,7 +73,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.5.1] - 2024-09-06
 
-### rotate_linux_password Role
+### Role - rotate_linux_password
 
 - Added `no_log` option to `rotate_new_password` variable.
 
@@ -83,11 +83,11 @@ All notable changes to this project will be documented in this file.
 
 - *rotate_linux_password* role added.
 
-### generate_csr Role
+### Role - generate_csr
 
 - Corrected Ubuntu versions listed in the role metadata.
 
-### self_signed_certificate Role
+### Role - self_signed_certificate
 
 - Corrected Ubuntu versions listed in the role metadata.
 
@@ -99,57 +99,57 @@ All notable changes to this project will be documented in this file.
 
 ## [2.4.0] - 2024-07-26
 
-### generate_csr Role
+### Role - generate_csr
 
 - Removed defaults for the `cert_private_key_path` and `cert_certificate_path` variables and made them required to prevent unexpected behavior.
 
-### self_signed_certificate Role
+### Role - self_signed_certificate
 
 - Removed defaults for the `cert_private_key_path` and `cert_certificate_path` variables and made them required to prevent unexpected behavior.
 
 ## [2.3.6] - 2024-07-11
 
-### generate_csr Role
+### Role - generate_csr
 
 - Updated documentation and role metadata for readability.
 - Added validation where possible.
 
-### self_signed_certificate Role
+### Role - self_signed_certificate
 
 - Updated documentation and role metadata for readability.
 - Added validation where possible.
 
 ## [2.3.5] - 2024-07-08
 
-### generate_csr Role
+### Role - generate_csr
 
 - Added step to gather facts regarding the OS family.
 
-### self_signed_certificate Role
+### Role - self_signed_certificate
 
 - Added step to gather facts regarding the OS family.
 - Added step to add the `cert_private_key_owner` user to the `ssl-cert` group on Debian-based machines.
 
 ## [2.3.3] - 2024-06-30
 
-### generate_csr Role
+### Role - generate_csr
 
 - Changed references to Red Hat Enterprise Linux (RHEL) to more accurately reference Enterprise Linux (EL) to convey the intention to support derivatives (Rocky/AlmaLinux/etc.)
 
-### self_signed_certificate Role
+### Role - self_signed_certificate
 
 - Changed references to Red Hat Enterprise Linux (RHEL) to more accurately reference Enterprise Linux (EL) to convey the intention to support derivatives (Rocky/AlmaLinux/etc.)
 
 ## [2.3.2] - 2024-06-29
 
-### generate_csr Role
+### Role - generate_csr
 
 - Added `allow_duplicates` to the role metadata.
 - Role refactored to not make use of `ignore_errors` option and instead use `rescue` block.
 
 ## [2.3.1] - 2024-06-27
 
-### generate_csr Role
+### Role - generate_csr
 
 - Role refactored to not make use of `ignore_errors` option when checking for existing certificate.
 
@@ -168,7 +168,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.1.2] - 2024-06-20
 
-### generate_csr Role
+### Role - generate_csr
 
 - Updated documentation and role metadata for readability.
 
@@ -178,7 +178,7 @@ All notable changes to this project will be documented in this file.
 
 - Minimum Ansible version changed from `2.11` to `2.14` due to align with EOL status.
 
-### generate_csr Role
+### Role - generate_csr
 
 - Added support for Debian 11 and 12, EL 9, and Ubuntu 20.04, 22.04, and 24.04 to the role metadata.
 
