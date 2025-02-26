@@ -4,7 +4,7 @@ name: general
 version: 2.8.0
 readme: README.md
 authors:
-  - Jim Tarpley
+  - Jim Tarpley (@trippsc2)
 description: This collection contains general purpose Ansible plugins.
 
 license_file: 'LICENSE'
