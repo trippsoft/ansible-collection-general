@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: self_signed_certificate_linux_pipe_
+      default_prefix: general_self_signed_certificate_linux_pipe_
     groups:
       - subjects
 provisioner:

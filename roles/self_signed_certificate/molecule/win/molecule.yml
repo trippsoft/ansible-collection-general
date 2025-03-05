@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: self_signed_certificate_win_
+      default_prefix: general_self_signed_certificate_win_
     groups:
       - subjects
       - windows

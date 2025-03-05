@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: rotate_linux_password_
+      default_prefix: general_rotate_linux_password_
     groups:
       - subjects
 provisioner:

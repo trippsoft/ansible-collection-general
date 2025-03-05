@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: generate_csr_linux_
+      default_prefix: general_generate_csr_linux_
     groups:
       - subjects
   - name: case2 # existing renewable cert
@@ -21,7 +21,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: generate_csr_linux_
+      default_prefix: general_generate_csr_linux_
     groups:
       - subjects
   - name: case3 # existing valid cert
@@ -29,7 +29,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: generate_csr_linux_
+      default_prefix: general_generate_csr_linux_
     groups:
       - subjects
 provisioner:

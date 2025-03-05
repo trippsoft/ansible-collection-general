@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: generate_csr_win_pipe_
+      default_prefix: general_generate_csr_win_pipe_
     groups:
       - subjects
       - windows
@@ -22,7 +22,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: generate_csr_win_pipe_
+      default_prefix: general_generate_csr_win_pipe_
     groups:
       - subjects
       - windows
@@ -31,7 +31,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: generate_csr_win_pipe_
+      default_prefix: general_generate_csr_win_pipe_
     groups:
       - subjects
       - windows
