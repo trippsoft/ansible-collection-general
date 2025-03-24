@@ -1,0 +1,6 @@
+---
+- name: Validate
+  ansible.builtin.import_tasks: validate.yml
+
+- name: Create DNS record
+  ansible.builtin.import_tasks: record.yml

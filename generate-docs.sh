@@ -1,6 +1,14 @@
 #! /bin/bash
 
-cd ./roles/generate_csr
+cd ./roles/acme_dns_certificate
+
+aar-doc . markdown
+
+cd ../gcp_dns_record
+
+aar-doc . markdown
+
+cd ../generate_csr
 
 aar-doc . markdown
 

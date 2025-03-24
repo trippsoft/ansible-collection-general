@@ -1,0 +1,37 @@
+---
+- name: Clear private key variable contents
+  when:
+    - not cert_private_key_to_variable
+  ansible.builtin.set_fact:
+    cert_private_key_content: ''
+    _cert_private_key: {}
+
+- name: Set intermediate certificate content variable
+  when:
+    - cert_acme_intermediate_certificate_to_variable
+  ansible.builtin.set_fact:
+    cert_certificate_content: "{{ _cert_acme_chain.content | b64decode }}"
+
+- name: Copy intermediate certificate to path
+  when:
+    - cert_acme_intermediate_certificate_to_file
+  ansible.windows.win_copy:
+    content: "{{ _cert_acme_chain.content | b64decode }}"
+    dest: "{{ cert_acme_intermediate_certificate_path }}"
+
+- name: Set certificate content variable
+  when:
+    - cert_certificate_to_variable
+  ansible.builtin.set_fact:
+    cert_certificate_content: "{{ _cert_acme_certificate.content | b64decode }}"
+
+- name: Copy certificate to path
+  when:
+    - cert_certificate_to_file
+  ansible.windows.win_copy:
+    content: "{{ _cert_acme_certificate.content | b64decode }}"
+    dest: "{{ cert_certificate_path }}"
+
+- name: Clear CSR variable contents
+  ansible.builtin.set_fact:
+    cert_csr_content: ''

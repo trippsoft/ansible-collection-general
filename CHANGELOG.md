@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.0] - 2025-03-24
+
+### Collection
+
+- *gcp_dns_record* role added.
+- *acme_dns_certificate* role added.
+
 ## [2.8.0] - 2025-02-20
 
 ### Role - generate_csr

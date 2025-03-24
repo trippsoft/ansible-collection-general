@@ -1,0 +1,48 @@
+---
+galaxy_info:
+  author: Jim Tarpley (@trippsc2)
+  namespace: trippsc2
+  role_name: self_signed_certificate
+  description: |
+    This role generates an ACME TLS certificate.
+    
+    The role depends on the `trippsc2.general.generate_csr` role to generate a private key and CSR.
+    
+    The role depends on another role to set a DNS TXT record for the ACME challenge.
+
+    The role does the following:
+      - Runs the `trippsc2.general.generate_csr` role to generate a private key and CSR, if needed.
+      - If the private key and CSR are generated, the role issues a dns-01 challenge to the ACME server.
+      - The DNS role is responsible for setting the DNS TXT record for the ACME challenge.
+      - Once the DNS record is set, the role will request the certificate from the ACME server and store it in the `cert_certificate_content` variable.
+      - Optionally, the role will save the certificate to a file.
+
+  license: MIT
+
+  min_ansible_version: '2.16'
+
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+    - name: EL
+      versions:
+        - '8'
+        - '9'
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+        - noble
+    - name: Windows
+      versions:
+        - '2019'
+        - '2022'
+
+collections:
+  - ansible.windows
+  - community.crypto
+
+dependencies:
+  - role: trippsc2.general.generate_csr

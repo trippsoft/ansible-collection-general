@@ -1,0 +1,86 @@
+---
+- name: Validate DNS role is defined
+  when:
+    - cert_acme_dns_role == 'custom'
+  ansible.builtin.assert:
+    that:
+      - cert_acme_custom_dns_role is defined
+    fail_msg: Custom DNS role must be defined.
+    success_msg: DNS role is defined.
+
+- name: Validate intermediate certificate path is defined
+  when:
+    - cert_acme_intermediate_certificate_to_file
+  ansible.builtin.assert:
+    that:
+      - cert_acme_intermediate_certificate_path is defined
+    fail_msg: Intermediate certificate path is not defined.
+    success_msg: Intermediate certificate path is defined.
+
+- name: Validate intermediate certificate owner user exists
+  when:
+    - cert_acme_intermediate_certificate_to_file
+    - ansible_os_family != 'Windows'
+  ansible.builtin.assert:
+    that:
+      - cert_acme_intermediate_certificate_owner in getent_passwd.keys()
+    fail_msg: "User '{{ cert_acme_intermediate_certificate_owner }}' does not exist."
+    success_msg: "User '{{ cert_acme_intermediate_certificate_owner }}' exists."
+
+- name: Validate intermediate certificate group exists
+  when:
+    - cert_acme_intermediate_certificate_to_file
+    - ansible_os_family != 'Windows'
+  ansible.builtin.assert:
+    that:
+      - cert_acme_intermediate_certificate_group in getent_group.keys()
+    fail_msg: "Group '{{ cert_acme_intermediate_certificate_group }}' does not exist."
+    success_msg: "Group '{{ cert_acme_intermediate_certificate_group }}' exists."
+
+- name: Validate certificate path is defined
+  when:
+    - cert_certificate_to_file
+  ansible.builtin.assert:
+    that:
+      - cert_certificate_path is defined
+    fail_msg: Certificate path is not defined.
+    success_msg: Certificate path is defined.
+
+- name: Validate certificate owner user exists
+  when:
+    - cert_certificate_to_file
+    - ansible_os_family != 'Windows'
+  ansible.builtin.assert:
+    that:
+      - cert_certificate_owner in getent_passwd.keys()
+    fail_msg: "User '{{ cert_certificate_owner }}' does not exist."
+    success_msg: "User '{{ cert_certificate_owner }}' exists."
+
+- name: Validate certificate group exists
+  when:
+    - cert_certificate_to_file
+    - ansible_os_family != 'Windows'
+  ansible.builtin.assert:
+    that:
+      - cert_certificate_group in getent_group.keys()
+    fail_msg: "Group '{{ cert_certificate_group }}' does not exist."
+    success_msg: "Group '{{ cert_certificate_group }}' exists."
+
+- name: Validate certificate is being output
+  ansible.builtin.assert:
+    that:
+      - cert_certificate_to_file or cert_certificate_to_variable
+    fail_msg: Certificate must be output to a file, to a variable, or both.
+    success_msg: Certificate is being output.
+
+- name: Clear intermediate certificate content
+  when:
+    - cert_acme_intermediate_certificate_to_variable
+  ansible.builtin.set_fact:
+    cert_acme_intermediate_certificate_content: ''
+
+- name: Clear certificate content
+  when:
+    - cert_certificate_to_variable
+  ansible.builtin.set_fact:
+    cert_certificate_content: ''

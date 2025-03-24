@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: Jim Tarpley (@trippsc2)
+  namespace: trippsc2
+  role_name: generate_csr
+  description: This role sets a DNS record in Google Cloud DNS.
+
+  license: MIT
+
+  min_ansible_version: '2.16'
+
+  platforms:
+    - name: GenericLinux
+      versions:
+        - all
+
+allow_duplicates: true
+
+collections:
+  - google.cloud
+
+dependencies: []

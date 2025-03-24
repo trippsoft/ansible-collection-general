@@ -1,0 +1,8 @@
+---
+- name: Validate
+  ansible.builtin.import_tasks: validate.yml
+
+- name: Create ACME certificate
+  when:
+    - cert_csr_content | default('') != ''
+  ansible.builtin.include_tasks: acme.yml

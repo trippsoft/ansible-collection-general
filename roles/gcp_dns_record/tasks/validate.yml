@@ -1,0 +1,21 @@
+---
+- name: Validate GCP service account credentials
+  when:
+    - gcp_auth_kind == 'serviceaccount'
+  ansible.builtin.assert:
+    that:
+      - gcp_service_account_file is defined or
+        gcp_service_account_contents is defined
+      - gcp_service_account_file is not defined or
+        gcp_service_account_contents is not defined
+    fail_msg: "Either 'gcp_service_account_file' or 'gcp_service_account_contents' must be defined, but not both."
+    success_msg: GCP service account credentials are defined.
+
+- name: Validate GCP access token
+  when:
+    - gcp_auth_kind == 'accesstoken'
+  ansible.builtin.assert:
+    that:
+      - gcp_access_token is defined
+    fail_msg: "The 'gcp_access_token' must be defined."
+    success_msg: GCP access token is defined.

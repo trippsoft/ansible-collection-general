@@ -1,0 +1,18 @@
+---
+cert_private_key_to_file: true
+cert_private_key_to_variable: false
+
+cert_acme_intermediate_certificate_to_file: true
+cert_acme_intermediate_certificate_to_variable: false
+cert_acme_intermediate_certificate_owner: root
+cert_acme_intermediate_certificate_group: root
+cert_acme_intermediate_certificate_mode: '0644'
+
+cert_acme_validate_certs: true
+cert_acme_version: 2
+
+cert_certificate_to_file: true
+cert_certificate_to_variable: false
+cert_certificate_owner: root
+cert_certificate_group: root
+cert_certificate_mode: '0644'

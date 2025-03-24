@@ -1,0 +1,17 @@
+---
+- name: Set Google Cloud DNS record
+  when:
+    - cert_acme_dns_role == 'trippsc2.general.gcp_dns_record'
+  ansible.builtin.include_role:
+    name: trippsc2.general.gcp_dns_record
+  vars:
+    gcp_dns_record_name: "{{ _cert_acme_challenge_data.value['dns-01'].record }}."
+    gcp_dns_record_type: TXT
+    gcp_dns_record_target:
+      - "{{ _cert_acme_challenge_data.value['dns-01'].resource_value }}"
+
+- name: Set custom DNS record
+  when:
+    - cert_acme_dns_role == 'custom'
+  ansible.builtin.include_role:
+    name: "{{ cert_acme_custom_dns_role }}"

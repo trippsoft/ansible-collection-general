@@ -1,0 +1,103 @@
+---
+argument_specs:
+  main:
+    short_description: GCP DNS Record
+    description:
+      - This role sets a DNS record in Google Cloud DNS.
+    author:
+      - Jim Tarpley (@trippsc2)
+    options:
+      gcp_auth_kind:
+        type: str
+        required: true
+        choices:
+          - application
+          - machineaccount
+          - serviceaccount
+          - accesstoken
+        description:
+          - The type of credential used to authenticate with GCP.
+          - If set to `serviceaccount`, *gcp_service_account_file* or *gcp_service_account_contents* are required.
+          - If set to `accesstoken`, *gcp_access_token* is required.
+      gcp_service_account_file:
+        type: path
+        required: false
+        description:
+          - The path to the service account file.
+          - This is mutually exclusive with *gcp_service_account_contents*.
+          - If *gcp_auth_kind* is set to `serviceaccount`, this or *gcp_service_account_contents* are required.
+      gcp_service_account_contents:
+        type: str
+        required: false
+        no_log: true
+        description:
+          - The contents of the service account file.
+          - This is mutually exclusive with *gcp_service_account_file*.
+          - If *gcp_auth_kind* is set to `serviceaccount`, this or *gcp_service_account_file* are required.
+      gcp_access_token:
+        type: str
+        required: false
+        no_log: true
+        description:
+          - The OAuth2 access token which which to authenticate.
+          - If *gcp_auth_kind* is set to `accesstoken`, this is required.
+      gcp_project:
+        type: str
+        required: true
+        description:
+          - The GCP project.
+      gcp_scopes:
+        type: list
+        required: false
+        elements: str
+        description:
+          - The GCP scopes.
+      gcp_dns_managed_zone_dns_name:
+        type: str
+        required: true
+        description:
+          - The DNS name of the managed zone.
+      gcp_dns_managed_zone_name:
+        type: str
+        required: true
+        description:
+          - The name of the managed zone.
+      gcp_dns_record_name:
+        type: str
+        required: true
+        description:
+          - The name of the record.
+      gcp_dns_record_type:
+        type: str
+        required: true
+        choices:
+          - A
+          - AAAA
+          - CAA
+          - CNAME
+          - DNSKEY
+          - DS
+          - IPSECVPNKEY
+          - MX
+          - NAPTR
+          - NS
+          - PTR
+          - SOA
+          - SPF
+          - SRV
+          - SSHFP
+          - TLSA
+          - TXT
+        description:
+          - The type of the DNS record.
+      gcp_dns_record_ttl:
+        type: int
+        required: false
+        description:
+          - The TTL of the DNS record in seconds.
+      gcp_dns_record_target:
+        type: list
+        required: true
+        elements: str
+        description:
+          - The target value of the DNS record.
