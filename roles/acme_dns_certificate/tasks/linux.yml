@@ -10,7 +10,7 @@
   when:
     - cert_acme_intermediate_certificate_to_variable
   ansible.builtin.set_fact:
-    cert_certificate_content: "{{ _cert_acme_chain.content | b64decode }}"
+    cert_acme_intermediate_certificate_content: "{{ _cert_acme_chain.content | b64decode }}"
 
 - name: Save intermediate certificate to file
   when:

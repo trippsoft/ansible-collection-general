@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.2] - 2025-03-25
+
+### Role - acme_dns_certificate
+
+- Fixed bug regarding intermediate CA certificate to variable.
+
 ## [2.9.1] - 2025-03-25
 
 ### Role - acme_dns_certificate
