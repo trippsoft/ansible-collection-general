@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.1] - 2025-03-25
+
+### Role - acme_dns_certificate
+
+- Changed `cert_acme_dns_role` and `cert_acme_dns_custom_role` to match other similar roles by renaming to `cert_acme_dns_type` and `cert_acme_dns_role` and simplifying pre-filled options.
+
 ## [2.9.0] - 2025-03-24
 
 ### Collection

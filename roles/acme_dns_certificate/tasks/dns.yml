@@ -1,7 +1,7 @@
 ---
 - name: Set Google Cloud DNS record
   when:
-    - cert_acme_dns_role == 'trippsc2.general.gcp_dns_record'
+    - cert_acme_dns_type == 'gcp'
   ansible.builtin.include_role:
     name: trippsc2.general.gcp_dns_record
   vars:
@@ -12,6 +12,6 @@
 
 - name: Set custom DNS record
   when:
-    - cert_acme_dns_role == 'custom'
+    - cert_acme_dns_type == 'custom'
   ansible.builtin.include_role:
-    name: "{{ cert_acme_custom_dns_role }}"
+    name: "{{ cert_acme_dns_role }}"

@@ -1,10 +1,10 @@
 ---
 - name: Validate DNS role is defined
   when:
-    - cert_acme_dns_role == 'custom'
+    - cert_acme_dns_type == 'custom'
   ansible.builtin.assert:
     that:
-      - cert_acme_custom_dns_role is defined
+      - cert_acme_dns_role is defined
     fail_msg: Custom DNS role must be defined.
     success_msg: DNS role is defined.
 

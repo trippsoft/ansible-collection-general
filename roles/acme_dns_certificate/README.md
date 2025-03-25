@@ -1,6 +1,6 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 # Ansible Role: trippsc2.general.acme_dns_certificate
-Version: 2.9.0
+Version: 2.9.1
 
 This role generates an ACME TLS certificate.
 
@@ -60,8 +60,8 @@ The role does the following:
 | cert_acme_intermediate_certificate_group | The group of the certificate on Linux systems. On Windows systems, this is ignored. | str | no | root |
 | cert_acme_intermediate_certificate_mode | The mode of the certificate on Linux systems. On Windows systems, this is ignored. | str | no | 0644 |
 | cert_acme_validate_certs | Whether to validate the ACME server certificates. | bool | no | True |
-| cert_acme_dns_role | The role to use to set the DNS TXT record for the ACME challenge. If set to `custom`, the `cert_acme_custom_dns_role` variable must be defined. | str | yes |  |
-| cert_acme_custom_dns_role | The custom role to use to set the DNS TXT record for the ACME challenge. This is required if *cert_acme_dns_role* is set to `custom`. | str | no |  |
+| cert_acme_dns_type | The role to use to set the DNS TXT record for the ACME challenge. If set to `custom`, the `cert_acme_dns_role` variable must be defined. | str | yes |  |
+| cert_acme_dns_role | The custom role to use to set the DNS TXT record for the ACME challenge. This is required if *cert_acme_dns_type* is set to `custom`. | str | no |  |
 | cert_certificate_to_file | Whether to generate the certificate to a file. If set to `true`, the certificate will be stored at the path specified in the `cert_certificate_path` variable. | bool | no | True |
 | cert_certificate_to_variable | Whether to store the certificate in a variable. If set to `true`, the certificate will be stored in the `cert_certificate_content` variable. | bool | no | False |
 | cert_certificate_path | The path to the certificate file to generate. If *cert_certificate_to_file* is `true`, this is required. | path | no |  |
@@ -76,11 +76,11 @@ The role does the following:
 | 1 |
 | 2 |
 
-#### Choices for main > cert_acme_dns_role
+#### Choices for main > cert_acme_dns_type
 
 |Choice|
 |---|
-| trippsc2.general.gcp_dns_record |
+| gcp |
 | custom |
 
 
@@ -100,7 +100,7 @@ The role does the following:
         cert_acme_account_key_content: # required, type: str
         cert_acme_account_email: # required, type: str
         cert_acme_directory: # required, type: str
-        cert_acme_dns_role: # required, type: str
+        cert_acme_dns_type: # required, type: str
 ```
 
 ## License

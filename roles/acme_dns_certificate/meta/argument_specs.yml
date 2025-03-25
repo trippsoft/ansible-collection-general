@@ -106,21 +106,21 @@ argument_specs:
         default: true
         description:
           - Whether to validate the ACME server certificates.
-      cert_acme_dns_role:
+      cert_acme_dns_type:
         type: str
         required: true
         choices:
-          - trippsc2.general.gcp_dns_record
+          - gcp
           - custom
         description:
           - The role to use to set the DNS TXT record for the ACME challenge.
-          - If set to `custom`, the `cert_acme_custom_dns_role` variable must be defined.
-      cert_acme_custom_dns_role:
+          - If set to `custom`, the `cert_acme_dns_role` variable must be defined.
+      cert_acme_dns_role:
         type: str
         required: false
         description:
           - The custom role to use to set the DNS TXT record for the ACME challenge.
-          - This is required if *cert_acme_dns_role* is set to `custom`.
+          - This is required if *cert_acme_dns_type* is set to `custom`.
       cert_certificate_to_file:
         type: bool
         required: false
