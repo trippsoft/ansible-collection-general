@@ -50,7 +50,7 @@ else:
     LIBRARY_MISSING_EXCEPTION = None
 
 
-def tz(value) -> bool:
+def tz(value: str) -> bool:
     """
     Whether the timezone name is valid.
 

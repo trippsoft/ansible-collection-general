@@ -55,8 +55,10 @@ import os
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.text.converters import to_native
 
+from typing import Optional
 
-def main():
+
+def main() -> None:
     module = AnsibleModule(
         argument_spec=dict(
             certificates=dict(type='list', elements='path', required=True),
@@ -66,15 +68,17 @@ def main():
         supports_check_mode=True
     )
 
-    owner = module.params.get('owner', None)
-    group = module.params.get('group', None)
-    mode = module.params.get('mode', None)
+    path: str = module.params['path']
+    owner: str = module.params.get('owner', None)
+    group: str = module.params.get('group', None)
+    mode: str = module.params.get('mode', None)
+    certificates: list[str] = module.params['certificates']
 
-    changed = False
+    changed: bool = False
 
-    expected_content = ''
+    expected_content: str = ''
 
-    for certificate in module.params['certificates']:
+    for certificate in certificates:
         if expected_content != '':
             expected_content += '\n'
 
@@ -83,34 +87,32 @@ def main():
                 expected_content += file.read()
         except (IOError, OSError) as e:
             if e.errno == errno.ENOENT:
-                msg = "file not found: %s" % certificate
+                msg: str = "file not found: %s" % certificate
             elif e.errno == errno.EACCES:
-                msg = "file is not readable: %s" % certificate
+                msg: str = "file is not readable: %s" % certificate
             elif e.errno == errno.EISDIR:
-                msg = "source is a directory and must be a file: %s" % certificate
+                msg: str = "source is a directory and must be a file: %s" % certificate
             else:
-                msg = "unable to read file: %s" % to_native(e, errors='surrogate_then_replace')
+                msg: str = "unable to read file: %s" % to_native(e, errors='surrogate_then_replace')
 
             module.fail_json(msg)
-
-    path = module.params['path']
 
     if os.path.exists(path):
 
         try:
             with open(path, 'r') as file:
-                actual_content = file.read()
+                actual_content: Optional[str] = file.read()
         except (IOError, OSError) as e:
             if e.errno == errno.EACCES:
-                msg = "file is not readable: %s" % path
+                msg: str = "file is not readable: %s" % path
             elif e.errno == errno.EISDIR:
-                msg = "source is a directory and must be a file: %s" % path
+                msg: str = "source is a directory and must be a file: %s" % path
             else:
-                msg = "unable to read file: %s" % to_native(e, errors='surrogate_then_replace')
+                msg: str = "unable to read file: %s" % to_native(e, errors='surrogate_then_replace')
 
             module.fail_json(msg)
     else:
-        actual_content = None
+        actual_content: Optional[str] = None
 
     if actual_content is None or expected_content != actual_content:
 
@@ -123,29 +125,15 @@ def main():
                     file.write(expected_content)
             except (IOError, OSError) as e:
                 if e.errno == errno.EACCES:
-                    msg = "file is not writable: %s" % path
+                    msg: str = "file is not writable: %s" % path
                 else:
-                    msg = "unable to write file: %s" % to_native(e, errors='surrogate_then_replace')
+                    msg: str = "unable to write file: %s" % to_native(e, errors='surrogate_then_replace')
 
                 module.fail_json(msg)
 
-    changed = module.set_owner_if_different(
-        path,
-        owner,
-        changed
-    )
-
-    changed = module.set_group_if_different(
-        path,
-        group,
-        changed
-    )
-
-    changed = module.set_mode_if_different(
-        path,
-        mode,
-        changed
-    )
+    changed = module.set_owner_if_different(path, owner, changed)
+    changed = module.set_group_if_different(path, group, changed)
+    changed = module.set_mode_if_different(path, mode, changed)
 
     module.exit_json(changed=changed)
 
