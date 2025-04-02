@@ -41,13 +41,15 @@ _value:
 from ansible.errors import AnsibleError
 from ansible.module_utils.six import raise_from
 
+from typing import Optional
+
 try:
     from pytz import timezone
     from pytz.exceptions import UnknownTimeZoneError
 except ImportError as import_exception:
-    LIBRARY_MISSING_EXCEPTION = import_exception
+    LIBRARY_MISSING_EXCEPTION: Optional[Exception] = import_exception
 else:
-    LIBRARY_MISSING_EXCEPTION = None
+    LIBRARY_MISSING_EXCEPTION: Optional[Exception] = None
 
 
 def tz(value: str) -> bool:
