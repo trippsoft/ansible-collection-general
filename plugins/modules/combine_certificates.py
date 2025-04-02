@@ -55,11 +55,11 @@ import os
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.text.converters import to_native
 
-from typing import Optional
+from typing import List, Optional
 
 
 def main() -> None:
-    module = AnsibleModule(
+    module: AnsibleModule = AnsibleModule(
         argument_spec=dict(
             certificates=dict(type='list', elements='path', required=True),
             path=dict(type='path', required=True)
@@ -69,10 +69,10 @@ def main() -> None:
     )
 
     path: str = module.params['path']
-    owner: str = module.params.get('owner', None)
-    group: str = module.params.get('group', None)
-    mode: str = module.params.get('mode', None)
-    certificates: list[str] = module.params['certificates']
+    owner: Optional[str] = module.params.get('owner', None)
+    group: Optional[str] = module.params.get('group', None)
+    mode: Optional[str] = module.params.get('mode', None)
+    certificates: List[str] = module.params['certificates']
 
     changed: bool = False
 
@@ -97,22 +97,25 @@ def main() -> None:
 
             module.fail_json(msg)
 
+    actual_content: Optional[str] = None
+
     if os.path.exists(path):
+
+        msg: Optional[str] = None
 
         try:
             with open(path, 'r') as file:
-                actual_content: Optional[str] = file.read()
+                actual_content = file.read()
         except (IOError, OSError) as e:
             if e.errno == errno.EACCES:
-                msg: str = "file is not readable: %s" % path
+                msg = "file is not readable: %s" % path
             elif e.errno == errno.EISDIR:
-                msg: str = "source is a directory and must be a file: %s" % path
+                msg = "source is a directory and must be a file: %s" % path
             else:
-                msg: str = "unable to read file: %s" % to_native(e, errors='surrogate_then_replace')
+                msg = "unable to read file: %s" % to_native(e, errors='surrogate_then_replace')
 
+        if msg is not None:
             module.fail_json(msg)
-    else:
-        actual_content: Optional[str] = None
 
     if actual_content is None or expected_content != actual_content:
 
@@ -120,15 +123,18 @@ def main() -> None:
 
         if not module.check_mode:
 
+            msg: Optional[str] = None
+
             try:
                 with open(path, 'w') as file:
                     file.write(expected_content)
             except (IOError, OSError) as e:
                 if e.errno == errno.EACCES:
-                    msg: str = "file is not writable: %s" % path
+                    msg = "file is not writable: %s" % path
                 else:
-                    msg: str = "unable to write file: %s" % to_native(e, errors='surrogate_then_replace')
+                    msg = "unable to write file: %s" % to_native(e, errors='surrogate_then_replace')
 
+            if msg is not None:
                 module.fail_json(msg)
 
     changed = module.set_owner_if_different(path, owner, changed)
