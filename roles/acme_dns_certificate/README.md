@@ -1,6 +1,6 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 # Ansible Role: trippsc2.general.acme_dns_certificate
-Version: 2.9.2
+Version: 2.10.0
 
 This role generates an ACME TLS certificate.
 
@@ -21,10 +21,10 @@ The role does the following:
 
 | Platform | Versions |
 | -------- | -------- |
-| Debian | bullseye, bookworm |
-| EL | 8, 9 |
-| Ubuntu | focal, jammy, noble |
-| Windows | 2019, 2022 |
+| Debian | bookworm |
+| EL | 9, 8 |
+| Ubuntu | noble, jammy, focal |
+| Windows | all |
 
 ## Role Arguments
 
@@ -35,14 +35,18 @@ The role does the following:
 ACME Certificate - DNS Challenge
 
 This role generates an ACME TLS certificate.
+
 The role depends on the `trippsc2.general.generate_csr` role to generate a private key and CSR.
+
 The role depends on another role to set a DNS TXT record for the ACME challenge.
+
 The role does the following:
   - Runs the `trippsc2.general.generate_csr` role to generate a private key and CSR, if needed.
   - If the private key and CSR are generated, the role issues a dns-01 challenge to the ACME server.
   - The DNS role is responsible for setting the DNS TXT record for the ACME challenge.
   - Once the DNS record is set, the role will request the certificate from the ACME server and store it in the `cert_certificate_content` variable.
   - Optionally, the role will save the certificate to a file.
+
 
 |Option|Description|Type|Required|Default|
 |---|---|---|---|---|

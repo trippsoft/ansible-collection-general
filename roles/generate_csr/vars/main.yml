@@ -1,10 +1,4 @@
 ---
-_cert_supported_os_families:
-  - Debian
-  - Nobara
-  - RedHat
-  - Windows
-
 _cert_private_key_size: >-
   {{ cert_private_key_size if cert_private_key_type == 'RSA' or cert_private_key_type == 'DSA' else omit }}
 

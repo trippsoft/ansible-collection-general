@@ -1,8 +1,0 @@
----
-- name: Validate
-  ansible.builtin.import_tasks: validate.yml
-
-- name: Rotate
-  when:
-    - _rotate_password_must_be_rotated
-  ansible.builtin.import_tasks: rotate.yml

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.10.0] - 2025-05-15
+
+### Collection
+
+- Removed *rotate_linux_password* role.
+
+### Role - generate_csr
+
+- Changed OS validation.
+
+### Role - self_signed_certificate
+
+- Changed OS validation.
+
 ## [2.9.2] - 2025-03-25
 
 ### Role - acme_dns_certificate

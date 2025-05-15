@@ -1,6 +1,6 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 # Ansible Role: trippsc2.general.gcp_dns_record
-Version: 2.9.2
+Version: 2.10.0
 
 This role sets a DNS record in Google Cloud DNS.
 
@@ -20,6 +20,7 @@ This role sets a DNS record in Google Cloud DNS.
 GCP DNS Record
 
 This role sets a DNS record in Google Cloud DNS.
+
 |Option|Description|Type|Required|Default|
 |---|---|---|---|---|
 | gcp_auth_kind | The type of credential used to authenticate with GCP. If set to `serviceaccount`, *gcp_service_account_file* or *gcp_service_account_contents* are required. If set to `accesstoken`, *gcp_access_token* is required. | str | yes |  |
