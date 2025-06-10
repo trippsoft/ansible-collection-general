@@ -1,0 +1,64 @@
+---
+name: Generate Role Docs
+'on':
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+    paths:
+      - galaxy.yml
+      - roles/acme_dns_certificate/.aar_doc.yml
+      - roles/acme_dns_certificate/README.md
+      - roles/acme_dns_certificate/meta/argument_specs.yml
+      - roles/acme_dns_certificate/meta/main.yml
+      - roles/gcp_dns_record/.aar_doc.yml
+      - roles/gcp_dns_record/README.md
+      - roles/gcp_dns_record/meta/argument_specs.yml
+      - roles/gcp_dns_record/meta/main.yml
+      - roles/generate_csr/.aar_doc.yml
+      - roles/generate_csr/README.md
+      - roles/generate_csr/meta/argument_specs.yml
+      - roles/generate_csr/meta/main.yml
+      - roles/self_signed_certificate/.aar_doc.yml
+      - roles/self_signed_certificate/README.md
+      - roles/self_signed_certificate/meta/argument_specs.yml
+      - roles/self_signed_certificate/meta/main.yml
+defaults:
+  run:
+    working-directory: 'trippsc2.general'
+jobs:
+  docs_acme_dns_certificate:
+    name: Generate acme_dns_certificate role documentation
+    permissions:
+      contents: write
+    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
+    with:
+      working_directory: 'trippsc2.general'
+      role_name: 'acme_dns_certificate'
+  docs_gcp_dns_record:
+    name: Generate gcp_dns_record role documentation
+    permissions:
+      contents: write
+    needs: docs_acme_dns_certificate
+    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
+    with:
+      working_directory: 'trippsc2.general'
+      role_name: 'gcp_dns_record'
+  docs_generate_csr:
+    name: Generate generate_csr role documentation
+    permissions:
+      contents: write
+    needs: docs_gcp_dns_record
+    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
+    with:
+      working_directory: 'trippsc2.general'
+      role_name: 'generate_csr'
+  docs_self_signed_certificate:
+    name: Generate self_signed_certificate role documentation
+    permissions:
+      contents: write
+    needs: docs_generate_csr
+    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
+    with:
+      working_directory: 'trippsc2.general'
+      role_name: 'self_signed_certificate'

@@ -1,7 +1,7 @@
 ---
 namespace: trippsc2
 name: general
-version: 2.10.0
+version: 2.10.1
 readme: README.md
 authors:
   - Jim Tarpley (@trippsc2)
@@ -18,7 +18,7 @@ dependencies:
   community.crypto: '>=1.0.0'
   google.cloud: '>=1.0.0'
 
-repository: https://github.com/trippsc2/ansible-collection-general.git
+repository: https://github.com/trippsoft/ansible-collection-general.git
 
 manifest:
   directives:
