@@ -1,6 +1,6 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 # Ansible Role: trippsc2.general.gcp_dns_record
-Version: 2.10.1
+Version: 2.10.2
 
 This role sets a DNS record in Google Cloud DNS.
 
