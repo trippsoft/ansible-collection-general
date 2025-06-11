@@ -23,7 +23,7 @@ The role does the following:
 | -------- | -------- |
 | Debian | bookworm |
 | EL | 9, 8 |
-| Ubuntu | noble, jammy, focal |
+| Ubuntu | noble, jammy |
 | Windows | all |
 
 ## Role Arguments
