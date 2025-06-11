@@ -6,11 +6,11 @@ This collection contains general purpose Ansible plugins.
 
 ### Module plugins
 
-- combine_certificates - Combine multiple certificates into a single file.
+- [combine_certificates](plugins/modules/combine_certificates.py) - Combine multiple certificates into a single file.
 
 ### Test plugins
 
-- tz - Validates Linux timezone names.
+- [tz](plugins/test/tz.py) - Validates Linux timezone names.
 
 ### Roles
 
