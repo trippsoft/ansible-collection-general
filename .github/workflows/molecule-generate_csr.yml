@@ -57,6 +57,7 @@ jobs:
           source ~/venv/ansible-2.16/bin/activate
           rm -rf ~/.ansible/collections/ansible_collections/*
           cd ./roles/generate_csr
+          ansible-galaxy collection install community.crypto<3.0.0
           molecule test -s linux
           rm -rf ~/.ansible/collections/ansible_collections/*
           deactivate
@@ -94,6 +95,7 @@ jobs:
           source ~/venv/ansible-2.16/bin/activate
           rm -rf ~/.ansible/collections/ansible_collections/*
           cd ./roles/generate_csr
+          ansible-galaxy collection install community.crypto<3.0.0
           molecule test -s linux_pipe
           rm -rf ~/.ansible/collections/ansible_collections/*
           deactivate
