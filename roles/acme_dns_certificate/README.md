@@ -1,6 +1,6 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 # Ansible Role: trippsc2.general.acme_dns_certificate
-Version: 2.10.2
+Version: 2.11.0
 
 This role generates an ACME TLS certificate.
 
@@ -27,7 +27,6 @@ The role does the following:
 | Windows | all |
 
 ## Role Arguments
-
 
 
 ### Entrypoint: main
