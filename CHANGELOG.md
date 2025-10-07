@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.11.0] - 2025-10-07
+
+### Role - generate_csr
+
+- Added support for Debian 13.
+- Added support for EL 10.
+
+### Role - self_signed_certificate
+
+- Added support for Debian 13.
+- Added support for EL 10.
+
 ## [2.10.2] - 2025-06-10
 
 ### Collection
