@@ -14,7 +14,6 @@ This role sets a DNS record in Google Cloud DNS.
 ## Role Arguments
 
 
-
 ### Entrypoint: main
 
 GCP DNS Record
