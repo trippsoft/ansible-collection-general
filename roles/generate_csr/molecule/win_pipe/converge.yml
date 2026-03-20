@@ -7,7 +7,7 @@
       when:
         - generate_existing_cert
       block:
-        - name: Get existing certificate content 
+        - name: Get existing certificate content
           become: true
           ansible.builtin.slurp:
             src: "{{ _cert_certificate_path }}"
@@ -16,7 +16,6 @@
         - name: Set existing certificate content variable
           ansible.builtin.set_fact:
             cert_existing_certificate_content: "{{ _cert_existing.content | b64decode }}"
-
   roles:
     - trippsc2.general.generate_csr
   tasks:

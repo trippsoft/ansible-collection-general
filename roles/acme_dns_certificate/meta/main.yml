@@ -5,9 +5,9 @@ galaxy_info:
   role_name: self_signed_certificate
   description: |
     This role generates an ACME TLS certificate.
-    
+
     The role depends on the `trippsc2.general.generate_csr` role to generate a private key and CSR.
-    
+
     The role depends on another role to set a DNS TXT record for the ACME challenge.
 
     The role does the following:

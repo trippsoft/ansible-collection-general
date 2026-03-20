@@ -193,7 +193,7 @@ argument_specs:
       cert_key_usage:
         type: list
         required: false
-        default: 
+        default:
           - digitalSignature
           - keyEncipherment
         elements: str
@@ -218,7 +218,7 @@ argument_specs:
       cert_extended_key_usage:
         type: list
         required: false
-        default: 
+        default:
           - serverAuth
           - clientAuth
         elements: str

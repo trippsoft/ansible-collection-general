@@ -2,7 +2,7 @@
 - name: Prepare
   hosts:
     - subjects
-  tasks:    
+  tasks:
     - name: Create test group
       become: true
       ansible.builtin.group:

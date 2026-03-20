@@ -33,7 +33,8 @@
           ansible.builtin.set_fact:
             _cert_generate_csr: true
       rescue:
-        - name: Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
+        - name: >-
+            Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
           ansible.builtin.set_fact:
             _cert_generate_csr: true
 
@@ -58,7 +59,8 @@
           ansible.builtin.set_fact:
             _cert_generate_csr: true
       rescue:
-        - name: Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
+        - name: >-
+            Set variable to indicate to generate CSR, if certificate does not exist or meets requirements to regenerate
           ansible.builtin.set_fact:
             _cert_generate_csr: true
 

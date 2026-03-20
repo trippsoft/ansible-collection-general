@@ -53,18 +53,42 @@ provisioner:
         ansible_password: vagrant
     host_vars:
       case1:
-        ansible_ssh_common_args: '-o PreferredAuthentications=password -o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o StrictHostKeyChecking=no'
+        ansible_ssh_common_args: >-
+          -o PreferredAuthentications=password
+          -o PubkeyAuthentication=no
+          -o UserKnownHostsFile=/dev/null
+          -o ControlMaster=auto
+          -o ControlPersist=60s
+          -o ForwardX11=no
+          -o LogLevel=ERROR
+          -o StrictHostKeyChecking=no
         generate_existing_private_key: false
         generate_existing_cert: false
         expected_csr: true
       case2:
-        ansible_ssh_common_args: '-o PreferredAuthentications=password -o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o StrictHostKeyChecking=no'
+        ansible_ssh_common_args: >-
+          -o PreferredAuthentications=password
+          -o PubkeyAuthentication=no
+          -o UserKnownHostsFile=/dev/null
+          -o ControlMaster=auto
+          -o ControlPersist=60s
+          -o ForwardX11=no
+          -o LogLevel=ERROR
+          -o StrictHostKeyChecking=no
         generate_existing_private_key: true
         generate_existing_cert: true
         existing_cert_duration: +1w
         expected_csr: true
       case3:
-        ansible_ssh_common_args: '-o PreferredAuthentications=password -o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o StrictHostKeyChecking=no'
+        ansible_ssh_common_args: >-
+          -o PreferredAuthentications=password
+          -o PubkeyAuthentication=no
+          -o UserKnownHostsFile=/dev/null
+          -o ControlMaster=auto
+          -o ControlPersist=60s
+          -o ForwardX11=no
+          -o LogLevel=ERROR
+          -o StrictHostKeyChecking=no
         generate_existing_private_key: true
         generate_existing_cert: true
         existing_cert_duration: +8w
@@ -80,7 +104,6 @@ scenario:
     - create
     - prepare
     - converge
-    #- idempotence
     # Removed idempotence check, because this scenario cannot be made idempotent.
     - side_effect
     - verify

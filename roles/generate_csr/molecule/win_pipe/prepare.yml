@@ -3,7 +3,7 @@
   hosts:
     - subjects
   gather_facts: false
-  tasks:    
+  tasks:
     - name: Generate private key
       when:
         - generate_existing_private_key

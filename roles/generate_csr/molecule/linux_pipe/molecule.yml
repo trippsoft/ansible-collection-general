@@ -71,7 +71,6 @@ scenario:
     - create
     - prepare
     - converge
-    #- idempotence
     # Removed idempotence check, because this scenario cannot be made idempotent.
     - side_effect
     - verify
