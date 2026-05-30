@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.12.0] - 2026-05-30
+
+### Role - generate_csr
+
+- Added support for Fedora 44.
+- Added support for Fedora 43.
+- Added support for Ubuntu 26.04.
+
+### Role - self_signed_certificate
+
+- Added support for Fedora 44.
+- Added support for Fedora 43.
+- Added support for Ubuntu 26.04.
+
 ## [2.11.0] - 2025-10-07
 
 ### Role - generate_csr
