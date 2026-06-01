@@ -31,34 +31,110 @@ jobs:
     name: Generate acme_dns_certificate role documentation
     permissions:
       contents: write
-    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
-    with:
-      working_directory: 'trippsc2.general'
-      role_name: 'acme_dns_certificate'
+    runs-on:
+      - self-hosted
+      - linux
+      - ansible
+      - x64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          path: trippsc2.general
+          ref: main
+      - name: Generate acme_dns_certificate role documentation
+        working-directory: 'trippsc2.general'
+        run: |
+          source ~/venv/ansible-2.16/bin/activate
+          cd ./roles/acme_dns_certificate
+          aar-doc . markdown
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+          git add README.md || /bin/true
+          git commit -m "Update acme_dns_certificate role documentation." || /bin/true
+          git push origin main
+          deactivate
   docs_gcp_dns_record:
     name: Generate gcp_dns_record role documentation
+    needs: docs_acme_dns_certificate
     permissions:
       contents: write
-    needs: docs_acme_dns_certificate
-    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
-    with:
-      working_directory: 'trippsc2.general'
-      role_name: 'gcp_dns_record'
+    runs-on:
+      - self-hosted
+      - linux
+      - ansible
+      - x64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          path: trippsc2.general
+          ref: main
+      - name: Generate gcp_dns_record role documentation
+        working-directory: 'trippsc2.general'
+        run: |
+          source ~/venv/ansible-2.16/bin/activate
+          cd ./roles/gcp_dns_record
+          aar-doc . markdown
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+          git add README.md || /bin/true
+          git commit -m "Update gcp_dns_record role documentation." || /bin/true
+          git push origin main
+          deactivate
   docs_generate_csr:
     name: Generate generate_csr role documentation
+    needs: docs_gcp_dns_record
     permissions:
       contents: write
-    needs: docs_gcp_dns_record
-    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
-    with:
-      working_directory: 'trippsc2.general'
-      role_name: 'generate_csr'
+    runs-on:
+      - self-hosted
+      - linux
+      - ansible
+      - x64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          path: trippsc2.general
+          ref: main
+      - name: Generate generate_csr role documentation
+        working-directory: 'trippsc2.general'
+        run: |
+          source ~/venv/ansible-2.16/bin/activate
+          cd ./roles/generate_csr
+          aar-doc . markdown
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+          git add README.md || /bin/true
+          git commit -m "Update generate_csr role documentation." || /bin/true
+          git push origin main
+          deactivate
   docs_self_signed_certificate:
     name: Generate self_signed_certificate role documentation
+    needs: docs_generate_csr
     permissions:
       contents: write
-    needs: docs_generate_csr
-    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
-    with:
-      working_directory: 'trippsc2.general'
-      role_name: 'self_signed_certificate'
+    runs-on:
+      - self-hosted
+      - linux
+      - ansible
+      - x64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          path: trippsc2.general
+          ref: main
+      - name: Generate self_signed_certificate role documentation
+        working-directory: 'trippsc2.general'
+        run: |
+          source ~/venv/ansible-2.16/bin/activate
+          cd ./roles/self_signed_certificate
+          aar-doc . markdown
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+          git add README.md || /bin/true
+          git commit -m "Update self_signed_certificate role documentation." || /bin/true
+          git push origin main
+          deactivate
