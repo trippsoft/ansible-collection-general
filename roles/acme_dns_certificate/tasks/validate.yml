@@ -20,7 +20,7 @@
 - name: Validate intermediate certificate owner user exists
   when:
     - cert_acme_intermediate_certificate_to_file
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
   ansible.builtin.assert:
     that:
       - cert_acme_intermediate_certificate_owner in getent_passwd.keys()
@@ -30,7 +30,7 @@
 - name: Validate intermediate certificate group exists
   when:
     - cert_acme_intermediate_certificate_to_file
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
   ansible.builtin.assert:
     that:
       - cert_acme_intermediate_certificate_group in getent_group.keys()
@@ -49,7 +49,7 @@
 - name: Validate certificate owner user exists
   when:
     - cert_certificate_to_file
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
   ansible.builtin.assert:
     that:
       - cert_certificate_owner in getent_passwd.keys()
@@ -59,7 +59,7 @@
 - name: Validate certificate group exists
   when:
     - cert_certificate_to_file
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
   ansible.builtin.assert:
     that:
       - cert_certificate_group in getent_group.keys()

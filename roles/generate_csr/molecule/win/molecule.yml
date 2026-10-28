@@ -1,6 +1,8 @@
 ---
 dependency:
   name: galaxy
+  options:
+    requirements-file: ${MOLECULE_SCENARIO_DIRECTORY}/requirements-${MOLECULE_ANSIBLE_VERSION:-2.16}.yml
 driver:
   name: vagrant
   provider:
@@ -9,7 +11,7 @@ driver:
   parallel: true
 platforms:
   - name: case1 # no existing cert
-    box: jtarpley/${MOLECULE_BOX:-w2025_cis}
+    box: trippsc2/${MOLECULE_BOX:-w2025_cis}
     memory: 2048
     cpus: 2
     provider_options:
@@ -18,7 +20,7 @@ platforms:
       - subjects
       - windows
   - name: case2 # existing renewable cert
-    box: jtarpley/${MOLECULE_BOX:-w2025_cis}
+    box: trippsc2/${MOLECULE_BOX:-w2025_cis}
     memory: 2048
     cpus: 2
     provider_options:
@@ -27,7 +29,7 @@ platforms:
       - subjects
       - windows
   - name: case3 # existing valid cert
-    box: jtarpley/${MOLECULE_BOX:-w2025_cis}
+    box: trippsc2/${MOLECULE_BOX:-w2025_cis}
     memory: 2048
     cpus: 2
     provider_options:

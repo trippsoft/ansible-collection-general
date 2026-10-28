@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.12.1] - 2026-10-29
+
+### Role - acme_dns_certificate
+
+- Changed fact gathering to use `ansible_facts` instead of direct variables.
+
+### Role - gcp_dns_record
+
+- Changed fact gathering to use `ansible_facts` instead of direct variables.
+
+### Role - generate_csr
+
+- Changed fact gathering to use `ansible_facts` instead of direct variables.
+- Fixed `regex_search` conditionals to use `is search` instead.
+
+### Role - self_signed_certificate
+
+- Changed fact gathering to use `ansible_facts` instead of direct variables.
+
 ## [2.12.0] - 2026-05-30
 
 ### Role - generate_csr

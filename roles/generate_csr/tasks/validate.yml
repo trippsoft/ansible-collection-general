@@ -1,11 +1,11 @@
 ---
 - name: Gather OS facts
   when:
-    - ansible_distribution is not defined or
-      ansible_distribution_major_version is not defined or
-      ansible_distribution_release is not defined or
-      ansible_distribution_version is not defined or
-      ansible_os_family is not defined
+    - ansible_facts.distribution is not defined or
+      ansible_facts.distribution_major_version is not defined or
+      ansible_facts.distribution_release is not defined or
+      ansible_facts.distribution_version is not defined or
+      ansible_facts.os_family is not defined
   ansible.builtin.setup:
     gather_subset:
       - '!all'
@@ -22,11 +22,11 @@
     _file: "{{ lookup('first_found', _params) }}"
     _params:
       files:
-        - "{{ ansible_distribution }}-{{ ansible_distribution_release | default('') }}.yml"
-        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-        - "{{ ansible_distribution }}.yml"
-        - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-        - "{{ ansible_os_family }}.yml"
+        - "{{ ansible_facts.distribution }}-{{ ansible_facts.distribution_release | default('') }}.yml"
+        - "{{ ansible_facts.distribution }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.distribution }}.yml"
+        - "{{ ansible_facts.os_family }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.os_family }}.yml"
         - fallback.yml
       paths:
         - "{{ role_path }}/vars"
@@ -35,39 +35,40 @@
   ansible.builtin.assert:
     that:
       - _cert_os_is_supported
-    fail_msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported."
-    success_msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is from a supported OS family."
+    fail_msg: "{{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }} is not supported."
+    success_msg: >-
+      {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }} is from a supported OS family.
 
 - name: Indicate OS is tested
   when:
     - _cert_os_is_tested
   ansible.builtin.debug:
-    msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} has been tested with this role."
+    msg: "{{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }} has been tested with this role."
 
 - name: Warn if OS is not tested
   when:
     - not _cert_os_is_tested
   ansible.builtin.debug:
-    msg: "WARNING: {{ ansible_distribution }} {{ ansible_distribution_version }} is not tested."
+    msg: "WARNING: {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }} is not tested."
   changed_when: true
 
 - name: Get OS user data
   when:
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
   ansible.builtin.getent:
     database: passwd
     split: ':'
 
 - name: Get OS group data
   when:
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
   ansible.builtin.getent:
     database: group
     split: ':'
 
 - name: Validate private key owner user exists
   when:
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
     - cert_private_key_to_file
   ansible.builtin.assert:
     that:
@@ -77,7 +78,7 @@
 
 - name: Validate private key group exists
   when:
-    - ansible_os_family != 'Windows'
+    - ansible_facts.os_family != 'Windows'
     - cert_private_key_to_file
   ansible.builtin.assert:
     that:
@@ -125,7 +126,7 @@
   loop: "{{ cert_subject_alternative_names }}"
   ansible.builtin.assert:
     that:
-      - item | regex_search('^(dirName|DNS|email|IP|RID|otherName|URI):')
+      - item is search('^(dirName|DNS|email|IP|RID|otherName|URI):')
     fail_msg: "Subject Alternative Name '{{ item }}' is not valid."
     success_msg: "Subject Alternative Name '{{ item }}' is valid."
 

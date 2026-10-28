@@ -60,7 +60,7 @@
       register: _cert_acme_certificate
 
     - name: Include OS family tasks
-      ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"
+      ansible.builtin.include_tasks: "{{ ansible_facts.os_family }}.yml"
   always:
     - name: Remove temporary directory
       delegate_to: localhost
