@@ -30,14 +30,20 @@ jobs:
       matrix:
         box:
           - debian13_base
-          - fedora44_base
           - fedora43_base
-          - rocky10_base
-          - rocky9_cis
+          - fedora44_base
           - rocky8_cis
-          - ubuntu2604_base
-          - ubuntu2404_base
+          - rocky9_cis
+          - rocky10_base
           - ubuntu2204_base
+          - ubuntu2404_base
+          - ubuntu2604_base
+        ansible:
+          - '2.16'
+          - '2.21'
+        exclude:
+          - box: rocky8_cis
+            ansible: '2.21'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -45,7 +51,7 @@ jobs:
           path: 'trippsc2.general'
       - name: Run Molecule tests
         run: |
-          source ~/venv/ansible-2.16/bin/activate
+          source ~/venv/ansible-${{ matrix.ansible }}/bin/activate
           rm -rf ~/.ansible/collections/ansible_collections/*
           molecule test -s combine_certificates
           rm -rf ~/.ansible/collections/ansible_collections/*
@@ -54,3 +60,4 @@ jobs:
           ANSIBLE_FORCE_COLOR: '1'
           PY_COLORS: '1'
           MOLECULE_BOX: ${{ matrix.box }}
+          MOLECULE_ANSIBLE_VERSION: ${{ matrix.ansible }}

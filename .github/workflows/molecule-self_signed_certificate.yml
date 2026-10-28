@@ -93,6 +93,9 @@ jobs:
         ansible:
           - '2.16'
           - '2.21'
+        exclude:
+          - box: rocky8_cis
+            ansible: '2.21'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
