@@ -39,7 +39,6 @@ _value:
 """
 
 from ansible.errors import AnsibleError
-from ansible.module_utils.six import raise_from
 
 from typing import Optional
 
@@ -64,17 +63,14 @@ def tz(value: str) -> bool:
     """
 
     if LIBRARY_MISSING_EXCEPTION is not None:
-        raise_from(
-            AnsibleError('Python package pytz must be installed to use this test.'),
-            LIBRARY_MISSING_EXCEPTION
-        )
+        raise AnsibleError('Python package pytz must be installed to use this test.') from LIBRARY_MISSING_EXCEPTION
 
     try:
         timezone(value)
     except UnknownTimeZoneError:
         return False
     except Exception as e:
-        raise_from(AnsibleError('An error occurred while validating the timezone name.'), e)
+        raise AnsibleError('An error occurred while validating the timezone name.') from e
 
     return True
 

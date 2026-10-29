@@ -21,6 +21,10 @@ All notable changes to this project will be documented in this file.
 
 - Changed fact gathering to use `ansible_facts` instead of direct variables.
 
+### Test Plugin - tz
+
+- Removed deprecated reference to `ansible.module_utils.six.raise_from`.
+
 ## [2.12.0] - 2026-05-30
 
 ### Role - generate_csr
